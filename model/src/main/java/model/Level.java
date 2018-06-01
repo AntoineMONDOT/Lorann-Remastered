@@ -12,10 +12,10 @@ import model.element.motionless.MotionlessElementFactory;
 
 public class Level extends Observable implements ILevel {
     /** The width. */
-    private int          width;
+    private int          width = 24;
 
     /** The height. */
-    private int          height;
+    private int          height = 12;
 
     /** The on the level. */
     private IElement[][] onTheLevel;
@@ -44,13 +44,38 @@ public class Level extends Observable implements ILevel {
     private void loadFile(final String fileName) throws IOException {
         final BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
         String line;
-        int y = 0;
-        line = buffer.readLine();
-        this.setWidth(Integer.parseInt(line));
-        line = buffer.readLine();
-        this.setHeight(Integer.parseInt(line));
+
         this.onTheLevel = new IElement[this.getWidth()][this.getHeight()];
-        line = buffer.readLine();
+        
+    	for (int n=0; n<height; n++)
+    	{
+
+    		for (int i=0; i < width;i++)
+    		{
+    			this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(' '), i, n);
+    		}
+    	}
+    	
+       line = buffer.readLine();
+        
+        while (line != null) {
+        	
+        	String values[] = line.split(":");
+        	int x1 = Integer.parseInt(values[0]);
+        	//System.out.println(x1);
+        	int y2 = Integer.parseInt(values[1]);
+        	//System.out.println(y2);
+        	
+        	char[] ch = values[2].toCharArray();
+        	char spriteChar = ch[0];
+        	//onTheLevel[x1][y2]=MotionlessElementFactory.getFromFileSymbol(spriteChar);
+        	this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(spriteChar), x1, y2);
+        	//System.out.println(onTheLevel[x1][y2]);
+        	line = buffer.readLine();
+        }
+        buffer.close();
+        
+        /*line = buffer.readLine();
         while (line != null) {
             for (int x = 0; x < line.toCharArray().length; x++) {
                 this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(line.toCharArray()[x]), x, y);
@@ -58,7 +83,7 @@ public class Level extends Observable implements ILevel {
             line = buffer.readLine();
             y++;
         }
-        buffer.close();
+        buffer.close();*/
     }
     
     /* public void loadsMap(int idlevel){
