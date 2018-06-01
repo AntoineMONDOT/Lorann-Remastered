@@ -1,6 +1,7 @@
 package model;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import contract.model.ILevel;
 import contract.model.IMobile;
@@ -23,9 +24,10 @@ public class ModelFacade implements IModelFacade {
      *            
      * @throws IOException
      *             Signals that an I/O exception has occurred.
+     * @throws SQLException 
      */
-    public ModelFacade(final String fileName) throws IOException {
-        this.setLevel(new Level(fileName));
+    public ModelFacade(final int idlevel) throws IOException, SQLException {
+        this.setLevel(new Level(idlevel));
         this.setLorann(new Lorann(21, 6, this.getLevel()));
     }
     

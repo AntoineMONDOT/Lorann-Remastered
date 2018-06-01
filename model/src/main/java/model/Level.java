@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Observable;
 
 import contract.model.IElement;
 import contract.model.ILevel;
+import model.dao.StoredProcedureDAO;
 import model.element.motionless.MotionlessElementFactory;
 
 public class Level extends Observable implements ILevel {
@@ -27,10 +30,11 @@ public class Level extends Observable implements ILevel {
      *            the file name where the map of the road is
      * @throws IOException
      *             Signals that an I/O exception has occurred.
+     * @throws SQLException 
      */
-    Level(final String fileName) throws IOException {
+    Level(final int idlevel) throws IOException, SQLException {
         super();
-        this.loadFile(fileName);
+        this.loadFile(idlevel);
     }
 
     /**
@@ -40,10 +44,9 @@ public class Level extends Observable implements ILevel {
      *            the file name
      * @throws IOException
      *             Signals that an I/O exception has occurred.
+     * @throws SQLException 
      */
-    private void loadFile(final String fileName) throws IOException {
-        final BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
-        String line;
+    private void loadFile(final int idlevel) throws IOException, SQLException {
 
         this.onTheLevel = new IElement[this.getWidth()][this.getHeight()];
         
@@ -55,92 +58,15 @@ public class Level extends Observable implements ILevel {
     			this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(' '), i, n);
     		}
     	}
+        ResultSet result;
     	
-       line = buffer.readLine();
-        
-        while (line != null) {
-        	
-        	String values[] = line.split(":");
-        	int x1 = Integer.parseInt(values[0]);
-        	//System.out.println(x1);
-        	int y2 = Integer.parseInt(values[1]);
-        	//System.out.println(y2);
-        	
-        	char[] ch = values[2].toCharArray();
-        	char spriteChar = ch[0];
-        	//onTheLevel[x1][y2]=MotionlessElementFactory.getFromFileSymbol(spriteChar);
-        	this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(spriteChar), x1, y2);
-        	//System.out.println(onTheLevel[x1][y2]);
-        	line = buffer.readLine();
+    	result = StoredProcedureDAO.getLevelCompById(idlevel);
+    	
+        while(result.next()) {
+            this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(result.getString(3).charAt(0)),result.getInt(1),result.getInt(2));
         }
-        buffer.close();
-        
-        /*line = buffer.readLine();
-        while (line != null) {
-            for (int x = 0; x < line.toCharArray().length; x++) {
-                this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(line.toCharArray()[x]), x, y);
-            }
-            line = buffer.readLine();
-            y++;
-        }
-        buffer.close();*/
+        result.close();
     }
-    
-    /* public void loadsMap(int idlevel){
-	Map level = new Map(24,12);
-	try {
-		ResultSet result = BddWithGame.procedure("{call elementMap(?)}", idlevel);
-		while(result.next()){
-			int x = result.getInt("x");
-			int y = result.getInt("y");
-			int elementcaratere = result.getInt("elementcaractere");
-			String url = result.getString("url");
-			switch(elementcaractere){
-			case 1: 
-				level.addElement(new Bone(x, y,url),x,y);
-				break;
-			case 2:
-				level.addElement(new HorizontalBone(x, y, url),x,y);
-				break;
-			case 3:
-				level.addElement(new VerticalBone(x, y, url),x,y);
-				break;
-			case 4:
-				level.addElement(new Crystal(x, y, url), x, y);
-				break;
-			case 6:
-				IElement gate = new Gate(x, y, url);
-				level.addElement(gate, x, y);
-				break;
-			case 7:
-				level.setLorann(new Lorann(x, y,url));
-				break;
-			/*case 8: 
-				level.addMobiles(new Monster1(x, y, url));
-				break;
-			case 9:
-				level.addMobiles(new Monster2(x, y, url));
-				break;
-			case 10:
-				level.addMobiles(new Monster3(x, y, url));
-				break;
-			case 11:
-				level.addMobiles(new Monster4(x, y, url));
-				break;
-			case 12:
-				level.addElement(new Purse(x, y, url), x, y);
-				break;
-			case 13:
-				level.addElement(new Tile(x, y, url), x, y);
-				break;
-			}
-		}
-		maps.add(map);
-	} catch (SQLException e) {
-		e.printStackTrace();
-	}
-}*/
-
     /**
      * get the width
      */
