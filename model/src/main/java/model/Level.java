@@ -1,30 +1,33 @@
 package model;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Observable;
 
 import contract.model.IElement;
 import contract.model.ILevel;
+import contract.model.IMobile;
 import model.dao.StoredProcedureDAO;
+import model.element.mobile.Lorann;
 import model.element.motionless.MotionlessElementFactory;
 
 public class Level extends Observable implements ILevel {
     /** The width. */
-    private int          width = 24;
+    public int          width = 24;
 
     /** The height. */
-    private int          height = 12;
+    public int          height = 12;
 
     /** The on the level. */
     private IElement[][] onTheLevel;
+    
+    /** The lorann. */
+    private IMobile lorann;
+   
 
     /**
-     * Instantiates a new level with the content of the file fileName.
+     * Instantiates a new level with the content of the db.
      *
      * @param fileName
      *            the file name where the map of the road is
@@ -32,9 +35,9 @@ public class Level extends Observable implements ILevel {
      *             Signals that an I/O exception has occurred.
      * @throws SQLException 
      */
-    Level(final int idlevel) throws IOException, SQLException {
-        super();
-        this.loadFile(idlevel);
+    Level(final int idlevel) throws IOException, SQLException {       
+    	super();
+        this.loadLevel(idlevel);
     }
 
     /**
@@ -46,11 +49,11 @@ public class Level extends Observable implements ILevel {
      *             Signals that an I/O exception has occurred.
      * @throws SQLException 
      */
-    private void loadFile(final int idlevel) throws IOException, SQLException {
+    private void loadLevel(final int idlevel) throws IOException, SQLException {
 
-        this.onTheLevel = new IElement[this.getWidth()][this.getHeight()];
+        this.onTheLevel = new IElement[this.getWidth()][this.getHeight()]; //create a 24/12 board and set all compartement to null 
         
-    	for (int n=0; n<height; n++)
+    	for (int n=0; n<height; n++) //now set all compartment to the default square 'blacktile' (background)
     	{
 
     		for (int i=0; i < width;i++)
@@ -58,12 +61,34 @@ public class Level extends Observable implements ILevel {
     			this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(' '), i, n);
     		}
     	}
-        ResultSet result;
     	
-    	result = StoredProcedureDAO.getLevelCompById(idlevel);
+    	//this will stored the result return by the stored procedure
+        ResultSet result = StoredProcedureDAO.getLevelCompById(idlevel); //
     	
-        while(result.next()) {
-            this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(result.getString(3).charAt(0)),result.getInt(1),result.getInt(2));
+        while(result.next()) { //while there is element for this level then we overwrite the default background
+        	
+        	switch (result.getString(StoredProcedureDAO.getColumnSprite()).charAt(0)) {
+        	
+        	case '@'://if character correspond to lorann (@) then we create lorann
+        		setLorann(new Lorann(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
+            break;
+        	/*case '1'://if character correspond to monster1 (1) then we create monster1
+            	setLorann(new Lorann(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
+            break;
+        	case '2'://if character correspond to monster2 (2) then we create monster2
+            	setLorann(new Lorann(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
+            break;
+        	case '3'://if character correspond to monster3 (3) then we create monster3
+            	setLorann(new Lorann(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
+            break;
+        	case '4'://if character correspond to monster4 (4) then we create monster4
+            	setLorann(new Lorann(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
+            break;*/
+            default:
+        	this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(
+            		result.getString(StoredProcedureDAO.getColumnSprite()).charAt(0)),result.getInt(StoredProcedureDAO.getColumnX()),result.getInt(StoredProcedureDAO.getColumnY()));
+            break;
+            }
         }
         result.close();
     }
@@ -76,31 +101,11 @@ public class Level extends Observable implements ILevel {
     }
 
     /**
-     * Sets the width.
-     *
-     * @param width
-     *            the new width
-     */
-    private void setWidth(final int width) {
-        this.width = width;
-    }
-
-    /**
      * get the height
      */
     @Override
     public final int getHeight() {
         return this.height;
-    }
-
-    /**
-     * Sets the height.
-     *
-     * @param height
-     *            the new height
-     */
-    private void setHeight(final int height) {
-        this.height = height;
     }
 
     /**
@@ -141,4 +146,12 @@ public class Level extends Observable implements ILevel {
     public Observable getObservable() {
         return this;
     }
+
+	public IMobile getLorann() {
+		return lorann;
+	}
+
+	public void setLorann(IMobile lorann) {
+		this.lorann = lorann;
+	}
 }

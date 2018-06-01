@@ -3,10 +3,6 @@ package model.dao;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import contract.model.IElement;
 
 
 /**
@@ -17,11 +13,11 @@ import contract.model.IElement;
  */
 public abstract class StoredProcedureDAO extends AbstractDAO {
 
-    /** The sql example by id. */
-    private static String sqlExampleById   = "{call getLevelCompById(?)}";
+    /** The sql procedure to get all the level. */
+    private static String sqlLevelById   = "{call getLevelCompById(?)}";
 
     /** The id column index. */
-    private static int    ColumnX    = 1;
+    private static int    ColumnX  = 1;
 
     /** The name column index. */
     private static int    ColumnY  = 2;
@@ -30,6 +26,7 @@ public abstract class StoredProcedureDAO extends AbstractDAO {
     private static int    ColumnSprite  = 3;
     
     private static ResultSet result;
+    
     /**
      * Gets each sprite of the choosen level.
      *
@@ -40,58 +37,38 @@ public abstract class StoredProcedureDAO extends AbstractDAO {
      *             the SQL exception
      */
    public static ResultSet getLevelCompById(final int idlevel) throws SQLException {
-        final CallableStatement callStatement = prepareCall(sqlExampleById);
+        final CallableStatement callStatement = prepareCall(sqlLevelById);
         callStatement.setInt(1, idlevel); //define the first variable of the stored procedure to idlevel to choose the level to load
         
         if (callStatement.execute()) {
             result = callStatement.getResultSet();
         }
 		return result;
-
     }
 
-    /**
-     * Gets the example by name.
-     *
-     * @param name
-     *            the name
-     * @return the example by name
-     * @throws SQLException
-     *             the SQL exception
-     */
-   /* public static Example getExampleByName(final String name) throws SQLException {
-        final CallableStatement callStatement = prepareCall(sqlExampleByName);
-        Example example = null;
+	public static int getColumnX() {
+		return ColumnX;
+	}
 
-        callStatement.setString(1, name);
-        if (callStatement.execute()) {
-            final ResultSet result = callStatement.getResultSet();
-            if (result.first()) {
-                example = new Example(result.getInt(idColumnIndex), result.getString(nameColumnIndex));
-            }
-            result.close();
-        }
-        return example;
-    }*/
+	public static void setColumnX(int columnX) {
+		ColumnX = columnX;
+	}
 
-    /**
-     * Gets the all examples.
-     *
-     * @return the all examples
-     * @throws SQLException
-     *             the SQL exception
-     */
-    /*public static List<Example> getAllExamples() throws SQLException {
-        final ArrayList<Example> examples = new ArrayList<Example>();
-        final CallableStatement callStatement = prepareCall(sqlAllExamples);
-        if (callStatement.execute()) {
-            final ResultSet result = callStatement.getResultSet();
+	public static int getColumnY() {
+		return ColumnY;
+	}
 
-            for (boolean isResultLeft = result.first(); isResultLeft; isResultLeft = result.next()) {
-                examples.add(new Example(result.getInt(idColumnIndex), result.getString(nameColumnIndex)));
-            }
-            result.close();
-        }
-        return examples;
-    }*/
+	public static void setColumnY(int columnY) {
+		ColumnY = columnY;
+	}
+
+	public static int getColumnSprite() {
+		return ColumnSprite;
+	}
+
+	public static void setColumnSprite(int columnSprite) {
+		ColumnSprite = columnSprite;
+	}
+   
+   
 }

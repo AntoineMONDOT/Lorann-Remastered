@@ -6,21 +6,22 @@ import java.sql.SQLException;
 import contract.model.ILevel;
 import contract.model.IMobile;
 import contract.model.IModelFacade;
-import model.element.mobile.Lorann;
 
 public class ModelFacade implements IModelFacade {
 
-	   /** The road. */
+	   /** The level. */
     private ILevel  level;
 
-    /** The my vehicle. */
+    /** The lorann. */
     private IMobile lorann;
     
     /**
      * Instantiates a new model.
+     * this load and stored the level from the DB
+     * this load the player & monsters
      *
-     * @param fileName
-     *            the file name
+     * @param idlevel
+     *            the idlevel to know the level to load
      *            
      * @throws IOException
      *             Signals that an I/O exception has occurred.
@@ -28,7 +29,7 @@ public class ModelFacade implements IModelFacade {
      */
     public ModelFacade(final int idlevel) throws IOException, SQLException {
         this.setLevel(new Level(idlevel));
-        this.setLorann(new Lorann(21, 6, this.getLevel()));
+        //this.setLorann(new Lorann(, , this.getLevel()));
     }
     
     /**
@@ -66,7 +67,7 @@ public class ModelFacade implements IModelFacade {
      * @param lorann
      *
      */
-    private void setLorann(final IMobile lorann) {
+    void setLorann(final IMobile lorann) {
         this.lorann = lorann;
     }
 

@@ -29,6 +29,6 @@ public enum UserOrder {
     /** The shoot. */
     SHOOT,
 
-    /** The nop. */
+    /** The no movement. */
     NOP
 }

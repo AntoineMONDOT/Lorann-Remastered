@@ -1,8 +1,12 @@
 package contract.model;
 
 public enum Permeability {
-    /** The blocking. */
+    /** The blocking for walls. */
     BLOCKING,
-    /** The penetrable. */
+    
+    /** The killing for gate_close  */
+    KILLING,
+    
+    /** The penetrable for blacktile(background). */
     PENETRABLE;
 }

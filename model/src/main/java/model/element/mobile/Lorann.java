@@ -16,10 +16,10 @@ public class Lorann extends Mobile implements ISprite{
     private static final ISprite sprite          = new Sprite('@', "lorann_ul.png");
 
     /** The Constant spriteTurnLeft. */
-    private static final ISprite spriteTurnLeft  = new Sprite('@', "lorann_l.png");
+    private static final ISprite spriteMoveLeft  = new Sprite('@', "lorann_l.png");
 
     /** The Constant spriteTurnRight. */
-    private static final ISprite spriteTurnRight = new Sprite('@', "lorann_r.png");
+    private static final ISprite spriteMoveRight = new Sprite('@', "lorann_r.png");
     
     /** The Constant spriteMoveUp. */
     private static final ISprite spriteMoveUp  = new Sprite('@', "lorann_u.png");
@@ -42,8 +42,9 @@ public class Lorann extends Mobile implements ISprite{
     /** The Constant spriteDie. */
     private static final ISprite spriteDie  = new Sprite('@', "BlackTile.jpg");
 
+    private int counter = 1;
     /**
-     * Instantiates a new my vehicle.
+     * Instantiates a new Loran.
      *
      * @param x
      *            the x
@@ -57,8 +58,8 @@ public class Lorann extends Mobile implements ISprite{
     public Lorann(final int x, final int y, final ILevel level) throws IOException {
         super(x, y, sprite, level, Permeability.BLOCKING);
         sprite.loadImage();
-        spriteTurnLeft.loadImage();
-        spriteTurnRight.loadImage();
+        spriteMoveLeft.loadImage();
+        spriteMoveRight.loadImage();
         spriteMoveUp.loadImage();
         spriteMoveDown.loadImage();
         spriteDie.loadImage();
@@ -71,7 +72,7 @@ public class Lorann extends Mobile implements ISprite{
     @Override
     public final void moveLeft() {
         super.moveLeft();
-        this.setSprite(spriteTurnLeft);
+        this.setSprite(spriteMoveLeft);
     }
 
     /*
@@ -81,7 +82,7 @@ public class Lorann extends Mobile implements ISprite{
     @Override
     public final void moveRight() {
         super.moveRight();
-        this.setSprite(spriteTurnRight);
+        this.setSprite(spriteMoveRight);
     }
     
     /*
@@ -143,24 +144,26 @@ public class Lorann extends Mobile implements ISprite{
      * @see fr.exia.insanevehicles.model.element.mobile.Mobile#doNothing()
      */
     @Override
-    public final void doNothing1() {
-        super.doNothing();
-        this.setSprite(spriteTurnLeft);
-    }
-    @Override
-    public final void doNothing2() {
-        super.doNothing();
-        this.setSprite(spriteMoveDown);
-    }
-    @Override
-    public final void doNothing3() {
-        super.doNothing();
-        this.setSprite(spriteTurnRight);
-    }
-    @Override
-    public final void doNothing4() {
-        super.doNothing();
-        this.setSprite(spriteMoveUp);
+    public final void doNothing() {
+    	super.doNothing();
+        switch ( getCounter() ) { //this switch is used to change the player picture when he didn't move
+		case 1:
+			this.setSprite(spriteMoveLeft); //first picture load, next time we do the while the second will be load
+			setCounter(2);
+			break;
+		case 2:
+			this.setSprite(spriteMoveUp); //third picture load, next time we do the while the fourth will be load
+			setCounter(3);
+    		break;
+		case 3:
+			this.setSprite(spriteMoveRight); //first picture load, next time we do the while the second will be load
+			setCounter(4);
+			break;
+		case 4:
+			this.setSprite(spriteMoveDown); //third picture load, next time we do the while the fourth will be load
+			setCounter(1);
+    		break;
+        }
     }
 
 	@Override
@@ -173,5 +176,13 @@ public class Lorann extends Mobile implements ISprite{
 	public char getConsoleImage() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public int getCounter() {
+		return counter;
+	}
+
+	public void setCounter(int counter) {
+		this.counter = counter;
 	}
 }

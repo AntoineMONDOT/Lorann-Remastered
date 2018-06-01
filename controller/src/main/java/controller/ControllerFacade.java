@@ -12,7 +12,7 @@ import contract.view.IViewFacade;
 
 public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 
-    /** The Constant speed of the thread. */
+    /** The game-thread refresh speed. */
     private static final int speed = 150;
 
     /** The view. */
@@ -27,7 +27,9 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 
 	
     /**
-     * Instantiates a new Lorann controller.
+     * Instantiates a new Lorann controller
+     * It will be used to move the player, monsters, power and the level and also to check if there is collision, kill ...
+     *
      *
      * @param view
      *            the view
@@ -37,75 +39,61 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 	public ControllerFacade(final IViewFacade view, final IModelFacade model) {
 		this.setView(view);
 	    this.setModel(model);
-	    this.clearStackOrder();
+	    this.clearStackOrder(); //set the user order to NOP so we are sure that the player do not move on spawn
 	}
 
 	/**
-	 * Drive the game, player movement and threading
+	 * Drive the game element movement, behavior and threading
 	 */
 	@Override
 	public void play() throws InterruptedException {
-		getModel().getLorann().alive();
-		int i = 1;
-		while (this.getModel().getLorann().isAlive()) {
-            Thread.sleep(speed);
-            switch (this.getStackOrder()) {
+		
+		getModel().getLevel().getLorann().alive(); // when the player lorann is load on the map is not alive so we set it alive after everything is load
+		//int i = 1; //this is the counter of the player picture when he didn't move we start at one
+		
+		while (this.getModel().getLevel().getLorann().isAlive()) { //here it's the heart a loop that will be repeated until the player isNotAlive
+            
+			Thread.sleep(speed); //make the thread sleep for a little time (in milliseconds)
+            
+			switch (this.getStackOrder()) { //this case execute the method associated to the user order (move, shot, nothing)
                 case RIGHT:
-                    this.getModel().getLorann().moveRight();
+                    this.getModel().getLevel().getLorann().moveRight();
                     break;
                 case LEFT:
-                    this.getModel().getLorann().moveLeft();
+                    this.getModel().getLevel().getLorann().moveLeft();
                     break;
                 case UP:
-                    this.getModel().getLorann().moveUp();
+                    this.getModel().getLevel().getLorann().moveUp();
                     break;
                 case DOWN:
-                    this.getModel().getLorann().moveDown();
+                    this.getModel().getLevel().getLorann().moveDown();
                     break;
                 case DOWNRIGHT:
-                    this.getModel().getLorann().moveDownRight();
+                    this.getModel().getLevel().getLorann().moveDownRight();
                     break;
                 case UPRIGHT:
-                    this.getModel().getLorann().moveUpRight();
+                    this.getModel().getLevel().getLorann().moveUpRight();
                     break;
                 case DOWNLEFT:
-                    this.getModel().getLorann().moveDownLeft();
+                    this.getModel().getLevel().getLorann().moveDownLeft();
                     break;
                 case UPLEFT:
-                    this.getModel().getLorann().moveUpLeft();
+                    this.getModel().getLevel().getLorann().moveUpLeft();
                     break;
                 case SHOOT:
-                    this.getModel().getLorann().doNothing();
-                    break;
                 case NOP:
                 default:
-                		switch ( i ) {
-                		case 1:
-                			this.getModel().getLorann().doNothing1();
-                			i=2;
-                			break;
-                		case 2:
-                    		this.getModel().getLorann().doNothing2();
-                    		i=3;
-                    		break;
-                		case 3:
-                    		this.getModel().getLorann().doNothing3();
-                    		i=4;
-                    		break;
-                		case 4:
-                    		this.getModel().getLorann().doNothing4();
-                    		i=1;
-                    		break;
+                	this.getModel().getLevel().getLorann().doNothing();
+                	break;
                 	}
                 	
                     
                     
-            }
-            this.clearStackOrder();
+            
+            this.clearStackOrder(); // this reset the user order to NOP so it will not continue to move when you released the key
 
-            //this.getView().followMyVehicle();
         }
-        this.getView().displayMessage("You died");
+        this.getView().displayMessage("You loose"); //when the main loop is break this display the message you loose on a popup 
 	}
 	
     /**

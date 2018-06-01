@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -21,16 +20,16 @@ import showboard.BoardFrame;
 
 public class ViewFacade implements IViewFacade, Runnable, KeyListener {
 
-    /** The Constant squareSize. */
+    /** The Constant width square number of the levels. */
     private static final int squareNumberWidth = 24;
     
-    /** The Constant squareSize. */
+    /** The Constant height square number of the levels. */
     private static final int squareNumberHeight = 12;
     
-    /** The Constant squareSize. */
+    /** The Constant squareSize to make the window bigger or smaller but keeping the proportions . */
     private static final int squareSize = 50;
 
-    /** The Constant closeView. */
+    /** The Constant closeView its the window launch by the thread. */
     private Rectangle        closeView;
 
     /** The level. */
@@ -41,12 +40,12 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
 
     /** The order performer. */
     private IOrderPerformer  orderPerformer;
-    
-   // /** The square of the window with a black background" */
-   // private Tile tile = new Tile("BlackTile.jpg");
+
 
     /**
      * Instantiates a new View.
+     * It will create the window, a frame and a kind of plate with square to place element of the level
+     * All of this his load and shown by the thread
      *
      * @param level
      *            the level
@@ -56,10 +55,11 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
      *             Signals that an I/O exception has occurred.
      */
     public ViewFacade(final ILevel level, final IMobile lorann) throws IOException {
-        this.setLevel(level);
+        this.setLevel(level); //create in memory the level (x,y,picture)
         this.setLorann(lorann);
-        this.getLorann().getSprite().loadImage();
+        //this defines a Rectangle in the closing view that begins at the coordinates 0,0 and whose width and height are those of the level (square unity)
         this.setCloseView(new Rectangle(0, 0, squareNumberWidth, squareNumberHeight));
+        //this launch the thread it launch the method run(), apart the all game
         SwingUtilities.invokeLater(this);
     }
 
@@ -76,32 +76,29 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
     */
 	@Override
     public final void run() {
-        final BoardFrame boardFrame = new BoardFrame("Lorann");
-        boardFrame.setDimension(new Dimension(squareNumberWidth, squareNumberHeight));
-        boardFrame.setDisplayFrame(this.getCloseView());
-        boardFrame.setSize(this.closeView.width * squareSize, this.closeView.height * squareSize);
-        boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        final BoardFrame boardFrame = new BoardFrame("Lorann"); //this create a new BoardFrame its simply a panel in the window named Lorann
         
-        boardFrame.addKeyListener(this);
-        boardFrame.setFocusable(true);
-        boardFrame.setFocusTraversalKeysEnabled(false);
+        boardFrame.setDimension(new Dimension(squareNumberWidth, squareNumberHeight)); // set the dimension of the panel to the level (square unity)
+        boardFrame.setDisplayFrame(this.getCloseView()); //say what to display in the frame
+        boardFrame.setSize(squareNumberWidth * squareSize, squareNumberHeight * squareSize); //set the size of thre frame (pixel unity) 
+        boardFrame.addKeyListener(this); //the window can listen to keyboard entry
 
-        for (int x = 0; x < squareNumberWidth; x++) {
+        for (int x = 0; x < squareNumberWidth; x++) { //this double for set each square to his sprite picture
             for (int y = 0; y < squareNumberHeight; y++) {
-                boardFrame.addSquare(this.level.getOnTheLevelXY(x, y), x, y); //not sure (tile ?)
+                boardFrame.addSquare(this.level.getOnTheLevelXY(x, y), x, y);
             }
         }
         
-        
-        boardFrame.addPawn(this.getLorann());
+        boardFrame.addPawn(this.getLorann()); //this place ('spawn') the mobile element Lorann over a square
 
-        this.getLevel().getObservable().addObserver(boardFrame.getObserver());
+        this.getLevel().getObservable().addObserver(boardFrame.getObserver()); //the view is registred to be observed by the level
         
-        boardFrame.setVisible(true);
+        boardFrame.setVisible(true); //make the game appear in first plan
     }
 
     /**
      * Key code to user order.
+     * It choose the right user order in function of the keycode
      *
      * @param keyCode
      *            the key code
@@ -158,11 +155,13 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
     }
 
     /**
-     * Catch the user keyPressed and send it to the userOrderPerformer
+     * Catch the user keyPressed, conver it and send it to the controller
      */
     @Override
     public final void keyPressed(final KeyEvent keyEvent) {
-        try {
+        try { 
+        	//we get the keycode and send it to keycodeUserOrder to transform it into a userOrder
+        	//then we send the userOrder to orderPerfrom who will stack the order in stackOrder
             this.getOrderPerformer().orderPerform(keyCodeToUserOrder(keyEvent.getKeyCode()));
         } catch (final IOException exception) {
             exception.printStackTrace();
@@ -196,27 +195,27 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
      */
     private void setLevel(final ILevel level) throws IOException {
         this.level = level;
-        for (int x = 0; x < ViewFacade.squareNumberWidth; x++) {
+        for (int x = 0; x < ViewFacade.squareNumberWidth; x++) { //this double for made the level
             for (int y = 0; y < ViewFacade.squareNumberHeight; y++) {
-                this.getLevel().getOnTheLevelXY(x, y).getSprite().loadImage(); //not sure
+                this.getLevel().getOnTheLevelXY(x, y).getSprite().loadImage(); //it place in memory the picture corresponding to a postion X Y
             }
         }
     }
 
     /**
-     * Gets my vehicle.
+     * Gets the lorann.
      *
-     * @return my vehicle
+     * @return the lorann
      */
     private IMobile getLorann() {
         return this.lorann;
     }
 
     /**
-     * Sets my vehicle.
+     * Sets the lorann.
      *
-     * @param myVehicle
-     *            my new vehicle
+     * @param lorann
+     *            the lorann
      */
     private void setLorann(final IMobile lorann) {
         this.lorann = lorann;

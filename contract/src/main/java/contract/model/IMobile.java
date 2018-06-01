@@ -76,14 +76,6 @@ public interface IMobile extends IPawn, IElement {
 
 	void alive();
 
-	void doNothing1();
-
-	void doNothing2();
-
-	void doNothing3();
-
-	void doNothing4();
-
 	void doNothing();
 
 }

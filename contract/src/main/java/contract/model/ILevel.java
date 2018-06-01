@@ -40,4 +40,6 @@ public interface ILevel {
      * @return the observable
      */
     Observable getObservable();
+
+	IMobile getLorann();
 }
