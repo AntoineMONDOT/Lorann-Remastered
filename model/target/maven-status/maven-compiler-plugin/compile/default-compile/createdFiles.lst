@@ -1,0 +1,15 @@
+model\element\motionless\Tile.class
+model\element\motionless\Crystal.class
+model\element\motionless\HorizontalBone.class
+model\element\mobile\Mobile.class
+model\element\Element.class
+model\element\motionless\Bone.class
+model\element\motionless\MotionlessElementFactory.class
+model\ModelFacade.class
+model\element\motionless\Gate.class
+model\element\mobile\Lorann.class
+model\Level.class
+model\element\motionless\VerticalBone.class
+model\element\motionless\MotionlessElement.class
+model\element\Sprite.class
+model\element\motionless\Purse.class

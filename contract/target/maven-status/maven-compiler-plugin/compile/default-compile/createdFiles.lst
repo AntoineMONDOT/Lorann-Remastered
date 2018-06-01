@@ -1,0 +1,10 @@
+contract\model\IModelFacade.class
+contract\controller\IOrderPerformer.class
+contract\controller\UserOrder.class
+contract\model\ISprite.class
+contract\model\ILevel.class
+contract\view\IViewFacade.class
+contract\model\IElement.class
+contract\model\Permeability.class
+contract\controller\IControllerFacade.class
+contract\model\IMobile.class
