@@ -60,6 +60,61 @@ public class Level extends Observable implements ILevel {
         }
         buffer.close();
     }
+    
+    /* public void loadsMap(int idlevel){
+	Map level = new Map(24,12);
+	try {
+		ResultSet result = BddWithGame.procedure("{call elementMap(?)}", idlevel);
+		while(result.next()){
+			int x = result.getInt("x");
+			int y = result.getInt("y");
+			int elementcaratere = result.getInt("elementcaractere");
+			String url = result.getString("url");
+			switch(elementcaractere){
+			case 1: 
+				level.addElement(new Bone(x, y,url),x,y);
+				break;
+			case 2:
+				level.addElement(new HorizontalBone(x, y, url),x,y);
+				break;
+			case 3:
+				level.addElement(new VerticalBone(x, y, url),x,y);
+				break;
+			case 4:
+				level.addElement(new Crystal(x, y, url), x, y);
+				break;
+			case 6:
+				IElement gate = new Gate(x, y, url);
+				level.addElement(gate, x, y);
+				break;
+			case 7:
+				level.setLorann(new Lorann(x, y,url));
+				break;
+			/*case 8: 
+				level.addMobiles(new Monster1(x, y, url));
+				break;
+			case 9:
+				level.addMobiles(new Monster2(x, y, url));
+				break;
+			case 10:
+				level.addMobiles(new Monster3(x, y, url));
+				break;
+			case 11:
+				level.addMobiles(new Monster4(x, y, url));
+				break;
+			case 12:
+				level.addElement(new Purse(x, y, url), x, y);
+				break;
+			case 13:
+				level.addElement(new Tile(x, y, url), x, y);
+				break;
+			}
+		}
+		maps.add(map);
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+}*/
 
     /**
      * get the width
