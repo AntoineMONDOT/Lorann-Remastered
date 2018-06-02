@@ -13,7 +13,7 @@ import model.element.Sprite;
 public class Monster4 extends Mobile implements ISprite{
 	
 	/** The Constant SPRITE. */
-    private static final ISprite sprite          = new Sprite('@', "monster_1.png");
+    private static final ISprite sprite          = new Sprite('@', "monster_4.png");
 
     /** The Constant spriteDie. */
     private static final ISprite spriteDie  = new Sprite('@', "noimage.png");
@@ -125,5 +125,7 @@ public class Monster4 extends Mobile implements ISprite{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	
 
 }

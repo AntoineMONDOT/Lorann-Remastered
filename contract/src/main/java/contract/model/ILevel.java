@@ -2,8 +2,6 @@ package contract.model;
 
 import java.util.Observable;
 
-import showboard.IPawn;
-
 public interface ILevel {
 
     /**
@@ -43,25 +41,40 @@ public interface ILevel {
      */
     Observable getObservable();
 
+    /**
+     * Gets the lorann.
+     *
+     * @return the lorann
+     */
 	IMobile getLorann();
 
+    /**
+     * Gets the monsters instance.
+     *
+     * @return the monsters
+     */
 	IMobile getMonster1();
-
 	IMobile getMonster2();
-
 	IMobile getMonster3();
-
 	IMobile getMonster4();
 
+    /**
+     * Get if monsters are instantiate or no.
+     *
+     * @return the monsters instance
+     */
 	boolean getMonster4instance();
-
 	boolean getMonster1instance();
-
 	boolean getMonster2instance();
-
 	boolean getMonster3instance();
 
-	Object getGate();
+    /**
+     * Get Elements that need to be update during the game
+     *
+     * @return Elements
+     */
+	IElement getGate();
+	IElement getCrystal();
 
-	void changeGate();
+
 }

@@ -1,15 +1,7 @@
-DELIMITER |
-CREATE PROCEDURE getLevelCompById (IN LevelChoice INT)
-SELECT x, y, sprite
-FROM LevelStruct
-WHERE IdLevel = LevelChoice 
-ORDER BY x, y;
-DELIMITER ;
-
 #------------------------------------------------------------
 #        Script MySQL.
 #------------------------------------------------------------
-CREATE DATABASE `Lorann` ;
+CREATE DATABASE IF NOT EXISTS `Lorann` ;
 
 USE `Lorann` ;
 
@@ -36,3 +28,11 @@ CREATE TABLE LevelStruct(
         PRIMARY KEY (IdLevel, x, y),
         CONSTRAINT FK_elementMap_IDlevel FOREIGN KEY (IdLevel) REFERENCES LevelList(IdLevel)
 )ENGINE=InnoDB;
+
+DELIMITER |
+CREATE PROCEDURE getLevelCompById (IN LevelChoice INT)
+SELECT x, y, sprite
+FROM LevelStruct
+WHERE IdLevel = LevelChoice 
+ORDER BY x, y|
+DELIMITER ;

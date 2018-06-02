@@ -1,18 +1,7 @@
 package contract.model;
 
 import java.awt.Image;
-
 import showboard.ISquare;
-
-
-
-
-
-
-
-
-
-
 
 
 public interface IElement extends ISquare{
@@ -38,4 +27,5 @@ public interface IElement extends ISquare{
     Image getImage();
 
 	void setPermeability(Permeability permeability);
+
 }

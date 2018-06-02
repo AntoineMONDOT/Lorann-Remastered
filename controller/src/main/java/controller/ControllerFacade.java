@@ -6,6 +6,7 @@ import contract.controller.IControllerFacade;
 import contract.controller.IOrderPerformer;
 import contract.controller.UserOrder;
 import contract.model.IModelFacade;
+import contract.model.Permeability;
 import contract.view.IViewFacade;
 import contract.model.IMobile;
 
@@ -14,7 +15,7 @@ import contract.model.IMobile;
 public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 
     /** The game-thread refresh speed. */
-    private static final int speed = 150;
+    private static final int speed = 35;
 
     /** The view. */
     private IViewFacade view;
@@ -37,8 +38,8 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
     /** The monster of type 1. */
     private IMobile monster4;
     
+    /** The boolean to stop game if player finish the level */
     private boolean win;
-    
 
 	
     /**
@@ -65,7 +66,8 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 		
 		getModel().getLevel().getLorann().alive(); // when the player lorann is load on the map is not alive so we set it alive after everything is load
 		
-		if(getModel().getLevel().getMonster1instance() != false) { //if a monster 1,2,3,4 from level exist then we stored it in monster 1,2,3,4
+		//if a monster 1,2,3,4 from level exist then we stored it in monster 1,2,3,4
+		if(getModel().getLevel().getMonster1instance() != false) { 
 			monster1 = getModel().getLevel().getMonster1();
 			monster1.doNothing();
 			}
@@ -81,13 +83,34 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
         	monster4 = getModel().getLevel().getMonster4();
         	monster4.doNothing();
         	}
+        
+      //if the level didn't get a crystal then we open the gate on level start
+        if(getModel().getLevel().getCrystal() == null) {
+        	getModel().getLevel().getGate().setPermeability(Permeability.OPENGATE);
+        	getView().OpenGateUpdate();
+        }
 		
-		while (this.getModel().getLevel().getLorann().isAlive() && win == false) { //here it's the heart a loop that will be repeated until the player isNotAlive
+      //----------------------------------------------------------------------------
+      //								GAME LOOP
+      //----------------------------------------------------------------------------
+      //here it's the heart a loop that will be repeated until the player isNotAlive
+		while (this.getModel().getLevel().getLorann().isAlive() && win == false) { 
             
 			Thread.sleep(speed); //make the thread sleep for a little time (in milliseconds)
 			
-			if(getModel().getLevel().getLorann().isOnCrystall()) {getModel().getLevel().changeGate();}
-			if(getModel().getLevel().getLorann().isOnOpenGate()) {win = true;}
+			//if player is on the crystall the we open the gate
+			if(getModel().getLevel().getLorann().isOnCrystall()) {
+				getModel().getLevel().getGate().setPermeability(Permeability.OPENGATE);//update the gate permeability from KILLING to OPENGATE
+				getView().OpenGateUpdate();
+			}
+			
+			//if player is on the crystall the we open the gate
+			if(getModel().getLevel().getLorann().isOnCrystall()) {
+				getModel().getLevel().getGate().setPermeability(Permeability.OPENGATE);//update the gate permeability from KILLING to OPENGATE
+				getView().OpenGateUpdate();
+			}
+			
+			if(getModel().getLevel().getLorann().isOnOpenGate()) {win = true;} //view.test();}
 			
 			switch (this.getStackOrder()) { //this case execute the method associated to the user order (move, shot, nothing)
                 case RIGHT:
@@ -119,8 +142,7 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
                 default:
                 	this.getModel().getLevel().getLorann().doNothing();
                 	break;
-                	}
-                	
+			}
                     
                     
             

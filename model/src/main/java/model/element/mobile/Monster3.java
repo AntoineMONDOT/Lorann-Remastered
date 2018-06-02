@@ -126,4 +126,5 @@ public class Monster3 extends Mobile implements ISprite{
 		return 0;
 	}
 
+	
 }

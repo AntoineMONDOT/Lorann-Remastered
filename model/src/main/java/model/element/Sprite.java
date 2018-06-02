@@ -1,6 +1,7 @@
 package model.element;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,7 +12,7 @@ import contract.model.ISprite;
 public class Sprite implements ISprite {
 
     /** The image. */
-    private Image   image;
+    private BufferedImage   image;
 
     /** The image name. */
     private String  imageName;
@@ -61,6 +62,7 @@ public class Sprite implements ISprite {
      *             Signals that an I/O exception has occurred.
      */
     public final void loadImage() throws IOException {
+    	
         this.setImage(ImageIO.read(new File("sprites/" + this.getImageName())));
     }
 
@@ -79,7 +81,7 @@ public class Sprite implements ISprite {
      * @param image
      *            the new image
      */
-    private void setImage(final Image image) {
+    public void setImage(final BufferedImage image) {
         this.image = image;
     }
 

@@ -3,6 +3,8 @@ package model.element.mobile;
 
 import java.io.IOException;
 
+
+
 import contract.model.ILevel;
 import contract.model.ISprite;
 import contract.model.Permeability;
@@ -42,8 +44,12 @@ public class Lorann extends Mobile implements ISprite{
     /** The Constant spriteDie. */
     private static final ISprite spriteDie  = new Sprite('@', "noimage.png");
     
+    /** Counter for Lorann picture state */
     private int counter = 1;
-
+    
+    /** Delay to change the lorann picture less rapidly than the thread is executed */
+	private int delay = 1;
+	
     /**
      * Instantiates a new Loran.
      *
@@ -148,25 +154,32 @@ public class Lorann extends Mobile implements ISprite{
     @Override
     public final void doNothing() {
     	super.doNothing();
-        switch ( getCounter() ) { //this switch is used to change the player picture when he didn't move
-		case 1:
-			this.setSprite(spriteMoveLeft); //first picture load, next time we do the while the second will be load
-			setCounter(2);
-			break;
-		case 2:
-			this.setSprite(spriteMoveUp); //third picture load, next time we do the while the fourth will be load
-			setCounter(3);
-    		break;
-		case 3:
-			this.setSprite(spriteMoveRight); //first picture load, next time we do the while the second will be load
-			setCounter(4);
-			break;
-		case 4:
-			this.setSprite(spriteMoveDown); //third picture load, next time we do the while the fourth will be load
-			setCounter(1);
-    		break;
-        }
-    }
+    	if(delay == 6) {
+    		delay=0;
+	    	switch ( getCounter() ) { //this switch is used to change the player picture when he didn't move
+			case 1:
+				this.setSprite(spriteMoveLeft); //first picture load, next time we do the while the second will be load
+				setCounter(2);
+				break;
+			case 2:
+				this.setSprite(spriteMoveUp); //third picture load, next time we do the while the fourth will be load
+				setCounter(3);
+	    		break;
+			case 3:
+				this.setSprite(spriteMoveRight); //first picture load, next time we do the while the second will be load
+				setCounter(4);
+				break;
+			case 4:
+				this.setSprite(spriteMoveDown); //third picture load, next time we do the while the fourth will be load
+				setCounter(1);
+	    		break;
+	    	}
+    	}
+	    	else{
+	    		delay++;
+	        }
+    	}
+
 
 	@Override
 	public void loadImage() throws IOException {
@@ -187,5 +200,6 @@ public class Lorann extends Mobile implements ISprite{
 	public void setCounter(int counter) {
 		this.counter = counter;
 	}
+	
 
 }

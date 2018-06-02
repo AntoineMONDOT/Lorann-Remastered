@@ -1,11 +1,15 @@
 package view;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -37,7 +41,11 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
     /** The order performer. */
     private IOrderPerformer  orderPerformer;
 
-
+    BoardFrame boardFrame;
+    
+    Image Door;
+    ImageIcon iDoor;
+    
     /**
      * Instantiates a new View.
      * It will create the window, a frame and a kind of plate with square to place element of the level
@@ -55,6 +63,7 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
         //this defines a Rectangle in the closing view that begins at the coordinates 0,0 and whose width and height are those of the level (square unity)
         this.setCloseView(new Rectangle(0, 0, squareNumberWidth, squareNumberHeight));
         //this launch the thread it launch the method run(), apart the all game
+
         SwingUtilities.invokeLater(this);
     }
 
@@ -70,9 +79,8 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
     * Thread that run the window
     */
 	@Override
-    public final void run() {
-        final BoardFrame boardFrame = new BoardFrame("Lorann"); //this create a new BoardFrame its simply a panel in the window named Lorann
-        
+    public final void run() { //this create a new BoardFrame its simply a panel in the window named Lorann
+        boardFrame = new BoardFrame("Lorann");
         boardFrame.setDimension(new Dimension(squareNumberWidth, squareNumberHeight)); // set the dimension of the panel to the level (square unity)
         boardFrame.setDisplayFrame(this.getCloseView()); //say what to display in the frame
         boardFrame.setSize(squareNumberWidth * squareSize, squareNumberHeight * squareSize); //set the size of thre frame (pixel unity) 
@@ -88,16 +96,37 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
         if(getLevel().getMonster2instance() != false) {boardFrame.addPawn(getLevel().getMonster2());}
         if(getLevel().getMonster3instance() != false) {boardFrame.addPawn(getLevel().getMonster3());}
         if(getLevel().getMonster4instance() != false) {boardFrame.addPawn(getLevel().getMonster4());}
-        
-        
         boardFrame.addPawn(getLevel().getLorann()); //this place ('spawn') the mobile element Lorann over a square
-
         
         this.getLevel().getObservable().addObserver(boardFrame.getObserver()); //the view is registred to be observed by the level
-        
         boardFrame.setVisible(true); //make the game appear in first plan
     }
-
+	
+	/**
+	 * Function to change the picture of the gate and crystal when the player take the crystal
+	 */
+	public void OpenGateUpdate() {
+		try {
+			getLevel().getGate().getImage().getGraphics().drawImage(ImageIO.read(new File("sprites/gate_open.png")),0,0, null); //this update the picture of the gate from close to open
+			if (getLevel().getCrystal() != null) //if the level get a crystal then we set it to black, else we didn't do anything
+				getLevel().getCrystal().getImage().getGraphics().drawImage(ImageIO.read(new File("sprites/BlackTile.jpg")),0,0, null);//this update the picture of the crystal to black
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Function to change the picture of the purse that the player take
+	 */
+	public void PurseUpdate() {
+		/*try {
+			getLevel().getGate().getImage().getGraphics().drawImage(ImageIO.read(new File("sprites/gate_open.png")),0,0, null); //this update the picture of the gate from close to open
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+	}
+	
+	
     /**
      * Key code to user order.
      * It choose the right user order in function of the keycode

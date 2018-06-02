@@ -8,19 +8,12 @@ import java.util.Observable;
 import contract.model.IElement;
 import contract.model.ILevel;
 import contract.model.IMobile;
-import contract.model.Permeability;
 import model.dao.StoredProcedureDAO;
-import model.element.Element;
 import model.element.mobile.Lorann;
 import model.element.mobile.Monster1;
 import model.element.mobile.Monster2;
 import model.element.mobile.Monster3;
 import model.element.mobile.Monster4;
-import model.element.motionless.Crystal;
-import model.element.motionless.Gate;
-//import model.element.mobile.Monster2;
-//import model.element.mobile.Monster3;
-//import model.element.mobile.Monster4;
 import model.element.motionless.MotionlessElementFactory;
 
 public class Level extends Observable implements ILevel {
@@ -52,8 +45,12 @@ public class Level extends Observable implements ILevel {
     private IMobile monster4;
     private boolean monster4instance;
    
+    /** The gate */
     private IElement gate;
-    //private IElement crystal;
+    
+    /** The crystal */
+    private IElement crystal;
+    
     /**
      * Instantiates a new level with the content of the db.
      *
@@ -83,13 +80,12 @@ public class Level extends Observable implements ILevel {
         
     	for (int n=0; n<height; n++) //now set all compartment to the default square 'blacktile' (background)
     	{
-
     		for (int i=0; i < width;i++)
     		{
     			this.setOnTheLevelXY(MotionlessElementFactory.getFromFileSymbol(' '), i, n);
     		}
     	}
-    	
+ 
     	//this will stored the result return by the stored procedure
         ResultSet result = StoredProcedureDAO.getLevelCompById(idlevel); //
     	
@@ -99,7 +95,6 @@ public class Level extends Observable implements ILevel {
         	
         	case '@'://if character correspond to lorann (@) then we create lorann
         		setLorann(new Lorann(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
-    
         		break;
         	case '1'://if character correspond to monster1 (1) then we create monster1
             	setMonster1(new Monster1(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
@@ -117,26 +112,25 @@ public class Level extends Observable implements ILevel {
             	setMonster4(new Monster4(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
             	setMonster4instance(true);
             	break;
-            	
-        	case 'H'://if character correspond to monster4 (4) then we create monster4
-            	this.setOnTheLevelXY(MotionlessElementFactory.getFromFileSymbol(
+        	case 'H'://if character correspond to the door we put the door in the variable gate
+        		this.setOnTheLevelXY(MotionlessElementFactory.getFromFileSymbol(
                 		result.getString(StoredProcedureDAO.getColumnSprite()).charAt(0)),result.getInt(StoredProcedureDAO.getColumnX()),result.getInt(StoredProcedureDAO.getColumnY()));
-            	setGate(this.getOnTheLevelXY(result.getInt(StoredProcedureDAO.getColumnX()),result.getInt(StoredProcedureDAO.getColumnY())));
+        		setGate(this.getOnTheLevelXY(result.getInt(StoredProcedureDAO.getColumnX()),result.getInt(StoredProcedureDAO.getColumnY())));
             	break; 
-            	
+        	case 'X'://if character correspond to the crystal we put it in the variable crystall
+        		this.setOnTheLevelXY(MotionlessElementFactory.getFromFileSymbol(
+                		result.getString(StoredProcedureDAO.getColumnSprite()).charAt(0)),result.getInt(StoredProcedureDAO.getColumnX()),result.getInt(StoredProcedureDAO.getColumnY()));
+        		setCrystal(this.getOnTheLevelXY(result.getInt(StoredProcedureDAO.getColumnX()),result.getInt(StoredProcedureDAO.getColumnY())));
+            	break;
             default:
         	this.setOnTheLevelXY(MotionlessElementFactory.getFromFileSymbol(
             		result.getString(StoredProcedureDAO.getColumnSprite()).charAt(0)),result.getInt(StoredProcedureDAO.getColumnX()),result.getInt(StoredProcedureDAO.getColumnY()));
             break;
             }
-
         }
         result.close();
     }
-    
-    public void changeGate() {
-    	gate.setPermeability(Permeability.OPENGATE);
-    }
+   
     
     /**
      * get the width
@@ -193,6 +187,10 @@ public class Level extends Observable implements ILevel {
         return this;
     }
 
+    
+    /**
+     * All getters and setter for element of the map that need to be update during the game
+     */
 	public IMobile getLorann() {
 		return lorann;
 	}
@@ -272,4 +270,13 @@ public class Level extends Observable implements ILevel {
 	public void setGate(IElement gate) {
 		this.gate = gate;
 	}
+
+	public IElement getCrystal() {
+		return crystal;
+	}
+
+	public void setCrystal(IElement crystal) {
+		this.crystal = crystal;
+	}
+
 }

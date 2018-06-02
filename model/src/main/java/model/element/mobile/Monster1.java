@@ -125,5 +125,6 @@ public class Monster1 extends Mobile implements ISprite{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
 
 }
