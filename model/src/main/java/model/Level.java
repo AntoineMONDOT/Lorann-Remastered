@@ -10,6 +10,13 @@ import contract.model.ILevel;
 import contract.model.IMobile;
 import model.dao.StoredProcedureDAO;
 import model.element.mobile.Lorann;
+import model.element.mobile.Monster1;
+import model.element.mobile.Monster2;
+import model.element.mobile.Monster3;
+import model.element.mobile.Monster4;
+//import model.element.mobile.Monster2;
+//import model.element.mobile.Monster3;
+//import model.element.mobile.Monster4;
 import model.element.motionless.MotionlessElementFactory;
 
 public class Level extends Observable implements ILevel {
@@ -24,6 +31,22 @@ public class Level extends Observable implements ILevel {
     
     /** The lorann. */
     private IMobile lorann;
+    
+    /** The monster of type 1. */
+    private IMobile monster1;
+    private boolean monster1instance;
+    
+    /** The monster of type 1. */
+    private IMobile monster2;
+    private boolean monster2instance;
+
+	/** The monster of type 1. */
+    private IMobile monster3;
+    private boolean monster3instance;
+    
+    /** The monster of type 1. */
+    private IMobile monster4;
+    private boolean monster4instance;
    
 
     /**
@@ -41,7 +64,7 @@ public class Level extends Observable implements ILevel {
     }
 
     /**
-     * Loads file.
+     * Loads the level stored all motion less position, instantiate all mobile element.
      *
      * @param fileName
      *            the file name
@@ -71,19 +94,24 @@ public class Level extends Observable implements ILevel {
         	
         	case '@'://if character correspond to lorann (@) then we create lorann
         		setLorann(new Lorann(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
-            break;
-        	/*case '1'://if character correspond to monster1 (1) then we create monster1
-            	setLorann(new Lorann(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
-            break;
+    
+        		break;
+        	case '1'://if character correspond to monster1 (1) then we create monster1
+            	setMonster1(new Monster1(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
+            	setMonster1instance(true);
+            	break;
         	case '2'://if character correspond to monster2 (2) then we create monster2
-            	setLorann(new Lorann(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
-            break;
+            	setMonster2(new Monster2(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
+            	setMonster2instance(true);
+            	break;
         	case '3'://if character correspond to monster3 (3) then we create monster3
-            	setLorann(new Lorann(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
-            break;
+            	setMonster3(new Monster3(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
+            	setMonster3instance(true);
+            	break;
         	case '4'://if character correspond to monster4 (4) then we create monster4
-            	setLorann(new Lorann(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
-            break;*/
+            	setMonster4(new Monster4(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
+            	setMonster4instance(true);
+            	break;
             default:
         	this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(
             		result.getString(StoredProcedureDAO.getColumnSprite()).charAt(0)),result.getInt(StoredProcedureDAO.getColumnX()),result.getInt(StoredProcedureDAO.getColumnY()));
@@ -153,5 +181,69 @@ public class Level extends Observable implements ILevel {
 
 	public void setLorann(IMobile lorann) {
 		this.lorann = lorann;
+	}
+
+	public IMobile getMonster1() {
+		return monster1;
+	}
+
+	public void setMonster1(IMobile monster1) {
+		this.monster1 = monster1;
+	}
+	
+    public IMobile getMonster2() {
+		return monster2;
+	}
+
+	public void setMonster2(IMobile monster2) {
+		this.monster2 = monster2;
+	}
+
+	public IMobile getMonster3() {
+		return monster3;
+	}
+
+	public void setMonster3(IMobile monster3) {
+		this.monster3 = monster3;
+	}
+
+	public IMobile getMonster4() {
+		return monster4;
+	}
+	
+	public void setMonster4(IMobile monster4) {
+		this.monster4 = monster4;
+	}
+
+	public boolean getMonster1instance() {
+		return monster1instance;
+	}
+
+	public void setMonster1instance(boolean monster1instance) {
+		this.monster1instance = monster1instance;
+	}
+
+	public boolean getMonster2instance() {
+		return monster2instance;
+	}
+
+	public void setMonster2instance(boolean monster2instance) {
+		this.monster2instance = monster2instance;
+	}
+
+	public boolean getMonster3instance() {
+		return monster3instance;
+	}
+
+	public void setMonster3instance(boolean monster3instance) {
+		this.monster3instance = monster3instance;
+	}
+
+	public boolean getMonster4instance() {
+		return monster4instance;
+	}
+
+	public void setMonster4instance(boolean monster4instance) {
+		this.monster4instance = monster4instance;
 	}
 }

@@ -9,7 +9,8 @@ import showboard.IPawn;
 
 public interface IMobile extends IPawn, IElement {
 
-    /**
+
+	/**
      * Move up.
      */
     void moveUp();
@@ -29,9 +30,31 @@ public interface IMobile extends IPawn, IElement {
      */
     void moveRight();
 
-
-    
-
+    /**
+     * Move up left.
+     */
+	void moveUpLeft();
+	
+	 /**
+     * Move down left.
+     */
+	void moveDownLeft();
+	
+	 /**
+     * Move up right.
+     */
+	void moveUpRight();
+	
+	 /**
+     * Move down right.
+     */
+	void moveDownRight();
+	
+	 /**
+     * No move.
+     */
+	void doNothing();
+	
     /**
      * Gets the x.
      *
@@ -54,7 +77,16 @@ public interface IMobile extends IPawn, IElement {
      * @return the alive
      */
     Boolean isAlive();
-
+    
+    /**
+     * Kill the playe
+     */
+	void die();
+    
+    /**
+     * Set player alive
+     */
+	void alive();
     /**
      * Checks if the car crashed.
      *
@@ -68,14 +100,5 @@ public interface IMobile extends IPawn, IElement {
      */
     @Override
     Point getPosition();
-
-	void moveUpLeft();
-	void moveDownLeft();
-	void moveUpRight();
-	void moveDownRight();
-
-	void alive();
-
-	void doNothing();
 
 }

@@ -145,7 +145,7 @@ public abstract class Mobile extends Element implements IMobile {
     /**
      * Sets the has moved.
      */
-    private void setHasMoved() {
+    protected void setHasMoved() {
         this.getLevel().setMobileHasChanged();
     }
 
@@ -231,7 +231,7 @@ public abstract class Mobile extends Element implements IMobile {
     /**
      * Dies.
      */
-    protected void die() {
+    public void die() {
         this.alive = false;
         this.setHasMoved();
     }

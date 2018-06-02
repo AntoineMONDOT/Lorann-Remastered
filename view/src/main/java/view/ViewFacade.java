@@ -12,7 +12,6 @@ import javax.swing.SwingUtilities;
 import contract.controller.IOrderPerformer;
 import contract.controller.UserOrder;
 import contract.model.ILevel;
-import contract.model.IMobile;
 import contract.view.IViewFacade;
 import showboard.BoardFrame;
 
@@ -35,9 +34,6 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
     /** The level. */
     private ILevel           level;
 
-    /** The lorann. */
-    private IMobile          lorann;
-
     /** The order performer. */
     private IOrderPerformer  orderPerformer;
 
@@ -54,9 +50,8 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public ViewFacade(final ILevel level, final IMobile lorann) throws IOException {
+    public ViewFacade(final ILevel level) throws IOException {
         this.setLevel(level); //create in memory the level (x,y,picture)
-        this.setLorann(lorann);
         //this defines a Rectangle in the closing view that begins at the coordinates 0,0 and whose width and height are those of the level (square unity)
         this.setCloseView(new Rectangle(0, 0, squareNumberWidth, squareNumberHeight));
         //this launch the thread it launch the method run(), apart the all game
@@ -88,9 +83,16 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
                 boardFrame.addSquare(this.level.getOnTheLevelXY(x, y), x, y);
             }
         }
-        
-        boardFrame.addPawn(this.getLorann()); //this place ('spawn') the mobile element Lorann over a square
 
+        if(getLevel().getMonster1instance() != false) {boardFrame.addPawn(getLevel().getMonster1());} //if instance of monster1 is not false then spawn it on level
+        if(getLevel().getMonster2instance() != false) {boardFrame.addPawn(getLevel().getMonster2());}
+        if(getLevel().getMonster3instance() != false) {boardFrame.addPawn(getLevel().getMonster3());}
+        if(getLevel().getMonster4instance() != false) {boardFrame.addPawn(getLevel().getMonster4());}
+        
+        
+        boardFrame.addPawn(getLevel().getLorann()); //this place ('spawn') the mobile element Lorann over a square
+
+        
         this.getLevel().getObservable().addObserver(boardFrame.getObserver()); //the view is registred to be observed by the level
         
         boardFrame.setVisible(true); //make the game appear in first plan
@@ -200,25 +202,6 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
                 this.getLevel().getOnTheLevelXY(x, y).getSprite().loadImage(); //it place in memory the picture corresponding to a postion X Y
             }
         }
-    }
-
-    /**
-     * Gets the lorann.
-     *
-     * @return the lorann
-     */
-    private IMobile getLorann() {
-        return this.lorann;
-    }
-
-    /**
-     * Sets the lorann.
-     *
-     * @param lorann
-     *            the lorann
-     */
-    private void setLorann(final IMobile lorann) {
-        this.lorann = lorann;
     }
 
 

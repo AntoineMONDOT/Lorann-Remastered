@@ -30,9 +30,9 @@ public abstract class StoredProcedureDAO extends AbstractDAO {
     /**
      * Gets each sprite of the choosen level.
      *
-     * @param id
-     *            the id
-     * @return the example by id
+     * @param idlevel
+     *            the level id
+     * @return the result of sql request
      * @throws SQLException
      *             the SQL exception
      */

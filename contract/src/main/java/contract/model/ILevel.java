@@ -2,6 +2,8 @@ package contract.model;
 
 import java.util.Observable;
 
+import showboard.IPawn;
+
 public interface ILevel {
 
     /**
@@ -42,4 +44,20 @@ public interface ILevel {
     Observable getObservable();
 
 	IMobile getLorann();
+
+	IMobile getMonster1();
+
+	IMobile getMonster2();
+
+	IMobile getMonster3();
+
+	IMobile getMonster4();
+
+	boolean getMonster4instance();
+
+	boolean getMonster1instance();
+
+	boolean getMonster2instance();
+
+	boolean getMonster3instance();
 }

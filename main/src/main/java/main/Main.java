@@ -21,15 +21,19 @@ public class Main {
 	 * It launch the heart of the game (play) which is a loop that run until player as 0 life
 	 * 
 	 * @param args
+	 * 		the args
 	 * @throws IOException
+	 * 		the IO exception
 	 * @throws InterruptedException
+	 * 		the thread exception
 	 * @throws SQLException
+	 * 	the SQL exception
 	 */
 	
 	public static void main(final String[] args) throws IOException, InterruptedException, SQLException {
 	
-		final IModelFacade model = new ModelFacade(1); 									//change the number to the wanted level
-        final IViewFacade view = new ViewFacade(model.getLevel(), model.getLevel().getLorann()); 	//we gave to the view the level, lorann and maybe further the monsters
+		final IModelFacade model = new ModelFacade(2); 									//change the number to the wanted level
+        final IViewFacade view = new ViewFacade(model.getLevel()); 						//we gave to the view the level, lorann and maybe further the monsters
         final IControllerFacade controller = new ControllerFacade(view, model); 		//the controller got the view and model to control them
         view.setOrderPerformer(controller.getOrderPeformer()); 							//this enable the view be update when there is a player movement from the controller
 

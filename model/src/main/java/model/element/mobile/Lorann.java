@@ -40,9 +40,10 @@ public class Lorann extends Mobile implements ISprite{
     private static final ISprite spriteMoveUpLeft = new Sprite('@', "lorann_ul.png");
 
     /** The Constant spriteDie. */
-    private static final ISprite spriteDie  = new Sprite('@', "BlackTile.jpg");
-
+    private static final ISprite spriteDie  = new Sprite('@', "noimage.png");
+    
     private int counter = 1;
+
     /**
      * Instantiates a new Loran.
      *
@@ -64,6 +65,7 @@ public class Lorann extends Mobile implements ISprite{
         spriteMoveDown.loadImage();
         spriteDie.loadImage();
     }
+    
 
     /*
      * (non-Javadoc)
@@ -134,7 +136,7 @@ public class Lorann extends Mobile implements ISprite{
      * @see fr.exia.insanevehicles.model.element.mobile.Mobile#die()
      */
     @Override
-    protected final void die() {
+	public final void die() {
         super.die();
         this.setSprite(spriteDie);
     }
@@ -185,4 +187,5 @@ public class Lorann extends Mobile implements ISprite{
 	public void setCounter(int counter) {
 		this.counter = counter;
 	}
+
 }

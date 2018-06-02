@@ -9,10 +9,4 @@ public interface IModelFacade {
      */
     ILevel getLevel();
 
-    /**
-     * Gets Lorann.
-     *
-     * @return Lorann
-     */
-    IMobile getLorann();
 }

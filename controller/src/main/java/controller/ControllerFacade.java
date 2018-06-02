@@ -7,6 +7,7 @@ import contract.controller.IOrderPerformer;
 import contract.controller.UserOrder;
 import contract.model.IModelFacade;
 import contract.view.IViewFacade;
+import contract.model.IMobile;
 
 
 
@@ -23,6 +24,18 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 
     /** The stack order. */
     private UserOrder stackOrder;
+    
+    /** The monster of type 1. */
+    private IMobile monster1;
+    
+    /** The monster of type 1. */
+    private IMobile monster2;
+
+	/** The monster of type 1. */
+    private IMobile monster3;
+    
+    /** The monster of type 1. */
+    private IMobile monster4;
     
 
 	
@@ -49,12 +62,29 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 	public void play() throws InterruptedException {
 		
 		getModel().getLevel().getLorann().alive(); // when the player lorann is load on the map is not alive so we set it alive after everything is load
-		//int i = 1; //this is the counter of the player picture when he didn't move we start at one
+		
+		if(getModel().getLevel().getMonster1instance() != false) { //if a monster 1,2,3,4 from level exist then we stored it in monster 1,2,3,4
+			monster1 = getModel().getLevel().getMonster1();
+			monster1.doNothing();
+			}
+        if(getModel().getLevel().getMonster2instance() != false) {
+        	monster2 = getModel().getLevel().getMonster2();
+        	monster2.doNothing();
+        	}
+        if(getModel().getLevel().getMonster3instance() != false) {
+        	monster3 = getModel().getLevel().getMonster3();
+        	monster3.doNothing();
+        	}
+        if(getModel().getLevel().getMonster4instance() != false) {
+        	monster4 = getModel().getLevel().getMonster4();
+        	monster4.doNothing();
+        	}
 		
 		while (this.getModel().getLevel().getLorann().isAlive()) { //here it's the heart a loop that will be repeated until the player isNotAlive
             
 			Thread.sleep(speed); //make the thread sleep for a little time (in milliseconds)
-            
+			
+			
 			switch (this.getStackOrder()) { //this case execute the method associated to the user order (move, shot, nothing)
                 case RIGHT:
                     this.getModel().getLevel().getLorann().moveRight();
@@ -93,6 +123,8 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
             this.clearStackOrder(); // this reset the user order to NOP so it will not continue to move when you released the key
 
         }
+		getModel().getLevel().getLorann().die();
+		
         this.getView().displayMessage("You loose"); //when the main loop is break this display the message you loose on a popup 
 	}
 	
