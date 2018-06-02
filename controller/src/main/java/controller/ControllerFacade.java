@@ -37,6 +37,8 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
     /** The monster of type 1. */
     private IMobile monster4;
     
+    private boolean win;
+    
 
 	
     /**
@@ -80,10 +82,12 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
         	monster4.doNothing();
         	}
 		
-		while (this.getModel().getLevel().getLorann().isAlive()) { //here it's the heart a loop that will be repeated until the player isNotAlive
+		while (this.getModel().getLevel().getLorann().isAlive() && win == false) { //here it's the heart a loop that will be repeated until the player isNotAlive
             
 			Thread.sleep(speed); //make the thread sleep for a little time (in milliseconds)
 			
+			if(getModel().getLevel().getLorann().isOnCrystall()) {getModel().getLevel().changeGate();}
+			if(getModel().getLevel().getLorann().isOnOpenGate()) {win = true;}
 			
 			switch (this.getStackOrder()) { //this case execute the method associated to the user order (move, shot, nothing)
                 case RIGHT:
@@ -123,9 +127,14 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
             this.clearStackOrder(); // this reset the user order to NOP so it will not continue to move when you released the key
 
         }
+		if (win =! true) {
 		getModel().getLevel().getLorann().die();
 		
-        this.getView().displayMessage("You loose"); //when the main loop is break this display the message you loose on a popup 
+        this.getView().displayMessage("You loose"); //when the main loop is break this display the message you loose on a popup 	
+		}
+		else {
+		this.getView().displayMessage("You win");
+		}
 	}
 	
     /**

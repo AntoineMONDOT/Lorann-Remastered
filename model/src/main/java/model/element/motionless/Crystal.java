@@ -12,6 +12,6 @@ public class Crystal extends MotionlessElement {
   * Instantiates a new crystal.
   */
  Crystal() {
-     super(SPRITE, Permeability.PENETRABLE);
+     super(SPRITE, Permeability.OPENNING);
  }
 }

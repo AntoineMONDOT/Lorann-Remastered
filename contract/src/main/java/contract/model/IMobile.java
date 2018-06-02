@@ -101,4 +101,10 @@ public interface IMobile extends IPawn, IElement {
     @Override
     Point getPosition();
 
+	Boolean isKilled();
+
+	Boolean isOnCrystall();
+
+	Boolean isOnOpenGate();
+
 }

@@ -59,7 +59,8 @@ public class Element implements IElement{
      * @param permeability
      *            the new permeability
      */
-    private void setPermeability(final Permeability permeability) {
+    
+    public void setPermeability(final Permeability permeability) {
         this.permeability = permeability;
     }
 

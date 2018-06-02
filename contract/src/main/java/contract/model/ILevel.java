@@ -60,4 +60,8 @@ public interface ILevel {
 	boolean getMonster2instance();
 
 	boolean getMonster3instance();
+
+	Object getGate();
+
+	void changeGate();
 }

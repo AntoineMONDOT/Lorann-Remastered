@@ -17,4 +17,8 @@ public class MotionlessElement extends Element {
     MotionlessElement(final ISprite sprite, final Permeability permeability) {
         super(sprite, permeability);
     }
+    
+    public void GateOpen(){
+    	
+    }
 }

@@ -72,6 +72,9 @@ public abstract class Mobile extends Element implements IMobile {
     public void moveUp() {
         this.setY(this.getY() - 1);
         this.setHasMoved();
+        if (this.isCrashed()) {
+            this.setY(this.getY() + 1);
+        }
     }
 
     /*
@@ -82,6 +85,9 @@ public abstract class Mobile extends Element implements IMobile {
     public void moveLeft() {
         this.setX(this.getX() - 1);
         this.setHasMoved();
+        if (this.isCrashed()) {
+            this.setX(this.getX() + 1);
+        }
     }
 
     /*
@@ -92,6 +98,9 @@ public abstract class Mobile extends Element implements IMobile {
     public void moveDown() {
         this.setY(this.getY() + 1);
         this.setHasMoved();
+        if (this.isCrashed()) {
+            this.setY(this.getY() - 1);
+        }
     }
 
     /*
@@ -102,6 +111,9 @@ public abstract class Mobile extends Element implements IMobile {
     public void moveRight() {
         this.setX(this.getX() + 1);
         this.setHasMoved();
+        if (this.isCrashed()) {
+            this.setX(this.getX() - 1);
+        }
     }
     
 
@@ -109,6 +121,11 @@ public abstract class Mobile extends Element implements IMobile {
     public void moveDownRight() {
         this.setX(this.getX() + 1);
         this.setY(this.getY() + 1);
+        if (this.isCrashed()) {
+            this.setX(this.getX() - 1);
+            this.setY(this.getY() - 1);
+        }
+        
         this.setHasMoved();
     }
     
@@ -116,6 +133,10 @@ public abstract class Mobile extends Element implements IMobile {
     public void moveDownLeft() {
         this.setX(this.getX() - 1);
         this.setY(this.getY() + 1);
+        if (this.isCrashed()) {
+            this.setX(this.getX() + 1);
+            this.setY(this.getY() - 1);
+        }
         this.setHasMoved();
     }
     
@@ -123,6 +144,10 @@ public abstract class Mobile extends Element implements IMobile {
     public void moveUpRight() {
         this.setX(this.getX() + 1);
         this.setY(this.getY() - 1);
+        if (this.isCrashed()) {
+            this.setX(this.getX() - 1);
+            this.setY(this.getY() + 1);
+        }
         this.setHasMoved();
     }
     
@@ -130,6 +155,10 @@ public abstract class Mobile extends Element implements IMobile {
     public void moveUpLeft() {
         this.setX(this.getX() - 1);
         this.setY(this.getY() - 1);
+        if (this.isCrashed()) {
+            this.setX(this.getX() + 1);
+            this.setY(this.getY() + 1);
+        }
         this.setHasMoved();
     }
 
@@ -166,7 +195,7 @@ public abstract class Mobile extends Element implements IMobile {
      */
     public final void setX(final int x) {
         this.getPosition().x = x;
-        if (this.isCrashed()) {
+        if (this.isKilled()) {
             this.die();
         }
     }
@@ -189,7 +218,7 @@ public abstract class Mobile extends Element implements IMobile {
      */
     public final void setY(final int y) {
         this.getPosition().y = y;
-        if (this.isCrashed()) {
+        if (this.isKilled()) {
             this.die();
         }
     }
@@ -243,6 +272,21 @@ public abstract class Mobile extends Element implements IMobile {
     @Override
     public Boolean isCrashed() {
         return this.getLevel().getOnTheLevelXY(this.getX(), this.getY()).getPermeability() == Permeability.BLOCKING;
+    }
+    
+    @Override
+    public Boolean isKilled() {
+        return this.getLevel().getOnTheLevelXY(this.getX(), this.getY()).getPermeability() == Permeability.KILLING;
+    }
+    
+    @Override
+    public Boolean isOnCrystall() {
+        return this.getLevel().getOnTheLevelXY(this.getX(), this.getY()).getPermeability() == Permeability.OPENNING;
+    }
+    
+    @Override
+    public Boolean isOnOpenGate() {
+        return this.getLevel().getOnTheLevelXY(this.getX(), this.getY()).getPermeability() == Permeability.OPENGATE;
     }
 
     /*

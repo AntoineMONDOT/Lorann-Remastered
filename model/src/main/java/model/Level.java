@@ -8,12 +8,16 @@ import java.util.Observable;
 import contract.model.IElement;
 import contract.model.ILevel;
 import contract.model.IMobile;
+import contract.model.Permeability;
 import model.dao.StoredProcedureDAO;
+import model.element.Element;
 import model.element.mobile.Lorann;
 import model.element.mobile.Monster1;
 import model.element.mobile.Monster2;
 import model.element.mobile.Monster3;
 import model.element.mobile.Monster4;
+import model.element.motionless.Crystal;
+import model.element.motionless.Gate;
 //import model.element.mobile.Monster2;
 //import model.element.mobile.Monster3;
 //import model.element.mobile.Monster4;
@@ -48,7 +52,8 @@ public class Level extends Observable implements ILevel {
     private IMobile monster4;
     private boolean monster4instance;
    
-
+    private IElement gate;
+    //private IElement crystal;
     /**
      * Instantiates a new level with the content of the db.
      *
@@ -81,7 +86,7 @@ public class Level extends Observable implements ILevel {
 
     		for (int i=0; i < width;i++)
     		{
-    			this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(' '), i, n);
+    			this.setOnTheLevelXY(MotionlessElementFactory.getFromFileSymbol(' '), i, n);
     		}
     	}
     	
@@ -112,14 +117,27 @@ public class Level extends Observable implements ILevel {
             	setMonster4(new Monster4(result.getInt(StoredProcedureDAO.getColumnX()), result.getInt(StoredProcedureDAO.getColumnY()), this));
             	setMonster4instance(true);
             	break;
+            	
+        	case 'H'://if character correspond to monster4 (4) then we create monster4
+            	this.setOnTheLevelXY(MotionlessElementFactory.getFromFileSymbol(
+                		result.getString(StoredProcedureDAO.getColumnSprite()).charAt(0)),result.getInt(StoredProcedureDAO.getColumnX()),result.getInt(StoredProcedureDAO.getColumnY()));
+            	setGate(this.getOnTheLevelXY(result.getInt(StoredProcedureDAO.getColumnX()),result.getInt(StoredProcedureDAO.getColumnY())));
+            	break; 
+            	
             default:
-        	this.setOnTheRoadXY(MotionlessElementFactory.getFromFileSymbol(
+        	this.setOnTheLevelXY(MotionlessElementFactory.getFromFileSymbol(
             		result.getString(StoredProcedureDAO.getColumnSprite()).charAt(0)),result.getInt(StoredProcedureDAO.getColumnX()),result.getInt(StoredProcedureDAO.getColumnY()));
             break;
             }
+
         }
         result.close();
     }
+    
+    public void changeGate() {
+    	gate.setPermeability(Permeability.OPENGATE);
+    }
+    
     /**
      * get the width
      */
@@ -154,7 +172,7 @@ public class Level extends Observable implements ILevel {
      * @param y
      *            the y
      */
-    private void setOnTheRoadXY(final IElement element, final int x, final int y) {
+    private void setOnTheLevelXY(final IElement element, final int x, final int y) {
         this.onTheLevel[x][y] = element;
     }
 
@@ -245,5 +263,13 @@ public class Level extends Observable implements ILevel {
 
 	public void setMonster4instance(boolean monster4instance) {
 		this.monster4instance = monster4instance;
+	}
+
+	public IElement getGate() {
+		return gate;
+	}
+
+	public void setGate(IElement gate) {
+		this.gate = gate;
 	}
 }

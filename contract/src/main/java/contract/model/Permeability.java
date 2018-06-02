@@ -4,9 +4,15 @@ public enum Permeability {
     /** The blocking for walls. */
     BLOCKING,
     
-    /** The killing for gate_close  */
+    /** The killing for gate_close, monsters  */
     KILLING,
     
     /** The penetrable for blacktile(background). */
-    PENETRABLE;
+    PENETRABLE,
+    
+    /** The opening for crystall */
+    OPENNING,
+	
+    /** The open gate */
+	OPENGATE;
 }

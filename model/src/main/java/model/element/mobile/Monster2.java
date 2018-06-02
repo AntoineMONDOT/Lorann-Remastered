@@ -29,7 +29,7 @@ public class Monster2 extends Mobile implements ISprite {
      *             Signals that an I/O exception has occurred.
      */
     public Monster2(final int x, final int y, final ILevel level) throws IOException {
-        super(x, y, sprite, level, Permeability.BLOCKING);
+        super(x, y, sprite, level, Permeability.KILLING);
         sprite.loadImage();
         spriteDie.loadImage();
     }
