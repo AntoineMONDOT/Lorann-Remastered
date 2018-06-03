@@ -135,7 +135,7 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
      *            the key code
      * @return the user order
      */
-    private static UserOrder keyCodeToUserOrder(final int keyCode) {
+    static UserOrder keyCodeToUserOrder(final int keyCode) {
         UserOrder userOrder;
                 
         switch (keyCode) {
