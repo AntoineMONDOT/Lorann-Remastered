@@ -138,7 +138,7 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
         	monster4.doNothing();
         	}
         
-        monsters = new ArrayList();
+        //monsters = new ArrayList();
         
         
       //if the level didn't get a crystal then we open the gate on level start
