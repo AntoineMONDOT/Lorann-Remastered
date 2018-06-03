@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 import contract.controller.IOrderPerformer;
 import contract.controller.UserOrder;
 import contract.model.ILevel;
+import contract.model.IMobile;
 import contract.view.IViewFacade;
 import showboard.BoardFrame;
 
@@ -122,6 +123,10 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}*/
+	}
+	
+	public void PowerSpawn (IMobile power) {
+		boardFrame.addPawn(power);
 	}
 	
 	

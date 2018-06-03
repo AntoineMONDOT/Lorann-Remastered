@@ -13,12 +13,24 @@ import model.element.Sprite;
 public class SupraPower extends Mobile implements ISprite{
 	
 	/** The Constant SPRITE. */
-    private static final ISprite sprite          = new Sprite('@', "monster_1.png");
+    private static final ISprite sprite1  = new Sprite('!', "fireball_1.png");
+    private static final ISprite sprite2  = new Sprite('!', "fireball_2.png");
+    private static final ISprite sprite3  = new Sprite('!', "fireball_3.png");
+    private static final ISprite sprite4  = new Sprite('!', "fireball_4.png");
+    private static final ISprite sprite5  = new Sprite('!', "fireball_5.png");
+    private static final ISprite nosprite  = new Sprite('!', "noimage.png");
+	private int delay = 1;
+	private int counter = 1;
+    
+    public int getCounter() {
+		return counter;
+	}
 
-    /** The Constant spriteDie. */
-    private static final ISprite spriteDie  = new Sprite('@', "noimage.png");
+	public void setCounter(int counter) {
+		this.counter = counter;
+	}
 
-    /**
+	/**
      * Instantiates a new Monster1.
      *
      * @param x
@@ -31,9 +43,39 @@ public class SupraPower extends Mobile implements ISprite{
      *             Signals that an I/O exception has occurred.
      */
     public SupraPower(final int x, final int y, final ILevel level) throws IOException {
-        super(x, y, sprite, level, Permeability.KILLING);
-        sprite.loadImage();
-        spriteDie.loadImage();
+        super(x, y, sprite1, level, Permeability.POWER);
+        sprite1.loadImage();
+        sprite2.loadImage();
+        sprite3.loadImage();
+        sprite4.loadImage();
+        sprite5.loadImage();
+        nosprite.loadImage();
+    }
+    
+    private void SpriteChanger() {
+	    	switch ( getCounter() ) { //this switch is used to change the player picture when he didn't move
+			case 1:
+				this.setSprite(sprite1); //first picture load, next time we do the while the second will be load
+				setCounter(2);
+				break;
+			case 2:
+				this.setSprite(sprite2); //third picture load, next time we do the while the fourth will be load
+				setCounter(3);
+	    		break;
+			case 3:
+				this.setSprite(sprite3); //first picture load, next time we do the while the second will be load
+				setCounter(4);
+				break;
+			case 4:
+				this.setSprite(sprite4); //third picture load, next time we do the while the fourth will be load
+				setCounter(5);
+	    		break;
+			case 5:
+				this.setSprite(sprite5); //third picture load, next time we do the while the fourth will be load
+				setCounter(1);
+	    		break;
+	    	}
+  	
     }
 
     /*
@@ -42,8 +84,8 @@ public class SupraPower extends Mobile implements ISprite{
      */
     @Override
     public final void moveLeft() {
+        this.SpriteChanger();
         super.moveLeft();
-        this.setSprite(sprite);
     }
 
     /*
@@ -52,8 +94,8 @@ public class SupraPower extends Mobile implements ISprite{
      */
     @Override
     public final void moveRight() {
-        super.moveRight();
-        this.setSprite(sprite);
+        this.SpriteChanger();
+    	super.moveRight();
     }
     
     /*
@@ -62,8 +104,8 @@ public class SupraPower extends Mobile implements ISprite{
      */
     @Override
     public final void moveUp() {
+        this.SpriteChanger();
         super.moveUp();
-        this.setSprite(sprite);
     }
 
     /*
@@ -72,8 +114,8 @@ public class SupraPower extends Mobile implements ISprite{
      */
     @Override
     public final void moveDown() {
-        super.moveDown();
-        this.setSprite(sprite);
+        this.SpriteChanger();
+    	super.moveDown();
     }
     
     @Override
@@ -99,7 +141,7 @@ public class SupraPower extends Mobile implements ISprite{
     @Override
 	public final void die() {
         super.die();
-        this.setSprite(spriteDie);
+        this.setSprite(nosprite);
     }
 
     /*
@@ -108,9 +150,8 @@ public class SupraPower extends Mobile implements ISprite{
      */
     @Override
     public final void doNothing() {
+    	this.SpriteChanger();
     	super.doNothing();
-		this.setSprite(sprite);
-		
 
     }
 

@@ -14,5 +14,8 @@ public enum Permeability {
     OPENNING,
 	
     /** The open gate */
-	OPENGATE;
+	OPENGATE, 
+	
+    /** The Lorann Power */
+	POWER;
 }

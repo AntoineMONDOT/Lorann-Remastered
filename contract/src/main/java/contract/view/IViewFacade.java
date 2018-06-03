@@ -1,6 +1,7 @@
 package contract.view;
 
 import contract.controller.IOrderPerformer;
+import contract.model.IMobile;
 
 public interface IViewFacade {
 
@@ -17,6 +18,9 @@ public interface IViewFacade {
 
 
 	void OpenGateUpdate();
+
+
+	void PowerSpawn(IMobile power);
 
 
 

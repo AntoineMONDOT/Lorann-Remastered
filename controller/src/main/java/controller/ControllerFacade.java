@@ -9,6 +9,7 @@ import contract.controller.UserOrder;
 import contract.model.IModelFacade;
 import contract.model.Permeability;
 import contract.view.IViewFacade;
+import model.element.mobile.SupraPower;
 import contract.model.IElement;
 import contract.model.IMobile;
 
@@ -17,7 +18,7 @@ import contract.model.IMobile;
 public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 
     /** The game-thread refresh speed. */
-    private static final int speed = 35;
+    private static final int speed = 50;
 
     /** The view. */
     private IViewFacade view;
@@ -40,9 +41,11 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
     /** The monster of type 1. */
     private IMobile monster4;
     
-    /** Monsters Array */
-    @SuppressWarnings("rawtypes")
-	private ArrayList monsters = new ArrayList();
+    /** Array of monster */
+    private ArrayList monsters;
+    
+    /** The Monsters speed counter */
+	private int monsterDelay = 1;
     
     /** The Lorann. */
     private IMobile lorann;
@@ -53,14 +56,29 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
     /** The Crystal. */
     private IElement crystal;
     
-    /** The boolean to stop game if player finish the level */
-    private boolean win;
+    /** The Super Power of Loran */
+    public IMobile power;
+    
+    /** Store the lastLorannOrder */
+    private UserOrder lastLorannOrder;
+    
+    /** take the value of the lastLorannOrder to know in which direction the power must go */
+    private UserOrder powerOrder;
+    
+    /** Ammo of the player allow instantiation of power */
+    private boolean ammo = true;
+    
+    /** The Power speed counter */
+    private int powerDelay = 5;
 
-    /** The Monsters counter speed */
-	private int delay;
+     /** The boolean to stop game if player finish the level */
+    private boolean win;
 	
 	/** The Monster speed */
 	private int mobSpeed = 15;
+	
+	/** The Power speed */
+    private int powerSpeed = 5;
 
 	
     /**
@@ -81,10 +99,11 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 
 	/**
 	 * Drive the game element movement, behavior and threading
+	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void play() throws InterruptedException {
+	public void play() throws InterruptedException, IOException {
 		
 		//---------------------------------------------------------------------------------------------------
 		//		This part prepare the variable and element of the level depending on each level
@@ -100,24 +119,27 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 		//if a monster 1,2,3,4 from level exist then we stored it in monster 1,2,3,4
 		if(getModel().getLevel().getMonster1instance() != false) { 
 			monster1 = getModel().getLevel().getMonster1();
+			monster1.alive();
 			monster1.doNothing();
-			monsters.add(monster1);
 			}
         if(getModel().getLevel().getMonster2instance() != false) {
         	monster2 = getModel().getLevel().getMonster2();
+        	monster2.alive();
         	monster2.doNothing();
-        	monsters.add(monster2);
         	}
         if(getModel().getLevel().getMonster3instance() != false) {
         	monster3 = getModel().getLevel().getMonster3();
+        	monster3.alive();
         	monster3.doNothing();
-        	monsters.add(monster3);
         	}
         if(getModel().getLevel().getMonster4instance() != false) {
         	monster4 = getModel().getLevel().getMonster4();
+        	monster4.alive();
         	monster4.doNothing();
-        	monsters.add(monster4);
         	}
+        
+        monsters = new ArrayList();
+        
         
       //if the level didn't get a crystal then we open the gate on level start
         if(getModel().getLevel().getCrystal() == null) {
@@ -135,55 +157,72 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 			
 			//if player is on the crystall the we open the gate
 			if(lorann.isOnCrystall()) {
-				gate.setPermeability(Permeability.OPENGATE);//update the gate permeability from KILLING to OPENGATE
+				//update the gate permeability from KILLING to OPENGATE
+				gate.setPermeability(Permeability.OPENGATE);
 	        	crystal.setPermeability(Permeability.PENETRABLE);
 				getView().OpenGateUpdate();
 			}
 			
 			//if the lorann is on the gate when it's open then we stop the game and say you win
-			if(lorann.isOnOpenGate()) {win = true;}
+			if(lorann.isOnOpenGate()) win = true;
 			
 			//if the lorann is on something that kill him then we stop the game and say you loose
-			if(lorann.isKilled()) {lorann.die();}
+			if(lorann.isKilled()) lorann.die();
 			
 			
 			switch (this.getStackOrder()) { //this case execute the method associated to the user order (move, shot, nothing)
                 case RIGHT:
                     this.lorann.moveRight();
+                    lastLorannOrder=UserOrder.RIGHT;
                     break;
                 case LEFT:
                     this.lorann.moveLeft();
+                    lastLorannOrder=UserOrder.LEFT;
                     break;
                 case UP:
                     this.lorann.moveUp();
+                    lastLorannOrder=UserOrder.UP;
                     break;
                 case DOWN:
                     this.lorann.moveDown();
+                    lastLorannOrder=UserOrder.DOWN;
                     break;
                 case DOWNRIGHT:
                     this.lorann.moveDownRight();
+                    lastLorannOrder=UserOrder.DOWNRIGHT;
                     break;
                 case UPRIGHT:
                     this.lorann.moveUpRight();
+                    lastLorannOrder=UserOrder.UPRIGHT;
                     break;
                 case DOWNLEFT:
                     this.lorann.moveDownLeft();
+                    lastLorannOrder=UserOrder.DOWNLEFT;
                     break;
                 case UPLEFT:
                     this.lorann.moveUpLeft();
+                    lastLorannOrder=UserOrder.UPLEFT;
                     break;
                 case SHOOT:
+                	if(ammo) {power = new SupraPower(lorann.getX(), lorann.getY(), getModel().getLevel());
+                	getView().PowerSpawn(power);
+                	powerOrder=lastLorannOrder;
+                	ammo = false;
+                	}
                 case NOP:
                 default:
                 	this.lorann.doNothing();
                 	break;
 			}
 			
+			if(power!=null)PowerMechanism();
 			
-			/*for (int i=0; i<monsters.size(); i++) {
-				MonsterIA((IMobile)monsters.get(i));
-			}*/
-			
+
+			if(monster1!=null && monster1.isAlive()) MonsterIA(monster1);
+			if(monster2!=null && monster2.isAlive()) MonsterIA(monster2);
+			if(monster3!=null && monster3.isAlive()) MonsterIA(monster3);
+			if(monster4!=null && monster4.isAlive()) MonsterIA(monster4);
+
             
             this.clearStackOrder(); // this reset the user order to NOP so it will not continue to move when you released the key
 
@@ -202,52 +241,79 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 	 * This function is a kind of IA for monster to go on Lorann
 	 */
 	private void MonsterIA(IMobile monster) {
-	   	if(delay == mobSpeed) {
-    		delay=0;
-		if(lorann.getX() > monster.getX()) {
-            monster.moveRight();
-
-		}
-		if(lorann.getX() < monster.getX()) {
-            monster.moveLeft();
-
-		}
-		if(lorann.getY() < monster.getY()) {
-            monster.moveUp();
-
-		}
-		if(lorann.getY() > monster.getY()) {
-            monster.moveDown();
-
-		}
+		//if the counter of delay match the mob wanted speed then we enter this if to move mob to the player
+		if(monsterDelay == mobSpeed) { 
+    		monsterDelay=0;
+    		//if(monster != null) {
+    		//move the monster to the player
+			if(lorann.getX() > monster.getX()) {
+	            monster.moveRight();
+			}
+			if(lorann.getX() < monster.getX()) {
+	            monster.moveLeft();
+			}
+			if(lorann.getY() < monster.getY()) {
+	            monster.moveUp();
+			}
+			if(lorann.getY() > monster.getY()) {
+	            monster.moveDown();
+			}
+    		//}
 	   	}
-	   	else delay++;
-		MobOnMobChecker(monster);
-	}
-	
-	public void MobOnMobChecker(IMobile monster) {
-		/*if(monster.getX() > monsters.getX()) {
-            monster.moveRight();
-
-		}
-		if(monster.getX() < monsters.getX()) {
-            monster.moveLeft();
-
-		}
-		if(monster.getY() < monsters.getY()) {
-            monster.moveUp();
-
-		}
-		if(monster.getY() > monsters.getY()) {
-            monster.moveDown();
-
-		}*/
+	   	//if the counter doesn't match speed then we increment the counter
+	   	else monsterDelay++;
+	   	
+		//go to the function that check if player is on a monster so he has to be killed
 		MobKillChecker(monster);
+
+		if(power!=null)PowerKillChecker(monster);
 	}
 
 	public void MobKillChecker(IMobile monster) {
-		if(lorann.getX()==monster.getX() && lorann.getY()==monster.getY() ) {lorann.die();}
+		if(lorann.getX()==monster.getX() && lorann.getY()==monster.getY()) {lorann.die();}
 	}
+	
+	public void PowerMechanism() {
+		//this if manage the power movement speed & picture change speed
+		if(powerDelay == powerSpeed) { 
+			powerDelay=0;
+			switch (this.powerOrder) {
+	        case LEFT:
+	            this.power.moveRight();
+	            break;
+	        case RIGHT:
+	            this.power.moveLeft();
+	            break;
+	        case DOWN:
+	            this.power.moveUp();
+	            break;
+	        case UP:
+	            this.power.moveDown();
+	            break;
+			}
+		}
+	   	//if the counter doesn't match speed then we increment the counter
+	   	else powerDelay++;
+	   	
+		//if Lorann is on the power then destroy the last power, and get 1 ammo
+		if(lorann.getX()==power.getX() && lorann.getY()==power.getY()) {
+			power.die();
+			ammo = true;
+			power = null;
+			powerDelay = 5;
+		}
+	}
+	
+	public void PowerKillChecker(IMobile monster) {
+		
+		if(power.getX()==monster.getX() && power.getY()==monster.getY()) {
+			monster.die();
+			monster=null;
+			power.die();
+			ammo = true;
+			power = null;
+			powerDelay = 5;
+	}}
 	
     /**
      * Write the UserOrder in the stack of order (stackOrder)
