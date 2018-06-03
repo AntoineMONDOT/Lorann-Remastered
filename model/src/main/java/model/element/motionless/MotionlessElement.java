@@ -4,7 +4,7 @@ import contract.model.ISprite;
 import contract.model.Permeability;
 import model.element.Element;
 
-public class MotionlessElement extends Element {
+public abstract class MotionlessElement extends Element {
 
 	   /**
      * Instantiates a new motionless element.
@@ -16,9 +16,5 @@ public class MotionlessElement extends Element {
      */
     MotionlessElement(final ISprite sprite, final Permeability permeability) {
         super(sprite, permeability);
-    }
-    
-    public void GateOpen(){
-    	
     }
 }

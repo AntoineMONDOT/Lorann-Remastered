@@ -2,33 +2,45 @@ package model.element.motionless;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+
+import contract.model.Permeability;
 
 public class CrystalTest {
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
+	private Crystal crystal;
 
 	@Before
 	public void setUp() throws Exception {
+		crystal = new Crystal();
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	
+	@Test
+	public void testCrsytalConstructor() {
+		assertNotNull(crystal);
 	}
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testCrystalCharacter() {
+		assertEquals(crystal.getSprite().getConsoleImage(),'X');
+	}
+	
+	@Test
+	public void testCrystalImage() {
+		assertEquals(crystal.getImage(),crystal.getSprite().getImage());
+	}
+	
+	@Test
+	public void testCrystalPermeabilityWhenNotTaken() {
+		assertEquals(crystal.getPermeability(),Permeability.OPENNING);
+	}
+	
+	@Test
+	public void testCrystalPermeabilityWhenAlreadyTake() {
+    	crystal.setPermeability(Permeability.PENETRABLE);
+		assertEquals(crystal.getPermeability(),Permeability.PENETRABLE);
 	}
 
 }

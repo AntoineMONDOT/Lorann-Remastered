@@ -95,6 +95,7 @@ public abstract class MotionlessElementFactory {
      * @return the from file symbol
      */
     public static MotionlessElement getFromFileSymbol(final char fileSymbol) {
+    	
         for (final MotionlessElement motionlessElement : motionlessElements) {
             if (motionlessElement.getSprite().getConsoleImage() == fileSymbol) {
                 return motionlessElement;

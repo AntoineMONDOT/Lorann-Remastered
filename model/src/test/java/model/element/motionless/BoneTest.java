@@ -2,33 +2,39 @@ package model.element.motionless;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
+import contract.model.Permeability;
+
 public class BoneTest {
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
+	
+	private Bone bone;
 
 	@Before
 	public void setUp() throws Exception {
+		bone = new Bone();
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	
+	@Test
+	public void testBoneConstructor() {
+		assertNotNull(bone);
 	}
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testBoneCharacter() {
+		assertEquals(bone.getSprite().getConsoleImage(),'O');
+	}
+	
+	@Test
+	public void testBoneImage() {
+		assertEquals(bone.getImage(),bone.getSprite().getImage());
+	}
+	
+	@Test
+	public void testBonePermeability() {
+		assertEquals(bone.getPermeability(),Permeability.BLOCKING);
 	}
 
 }

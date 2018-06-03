@@ -101,12 +101,7 @@ public class ControllerFacade implements IControllerFacade, IOrderPerformer {
 			//if player is on the crystall the we open the gate
 			if(getModel().getLevel().getLorann().isOnCrystall()) {
 				getModel().getLevel().getGate().setPermeability(Permeability.OPENGATE);//update the gate permeability from KILLING to OPENGATE
-				getView().OpenGateUpdate();
-			}
-			
-			//if player is on the crystall the we open the gate
-			if(getModel().getLevel().getLorann().isOnCrystall()) {
-				getModel().getLevel().getGate().setPermeability(Permeability.OPENGATE);//update the gate permeability from KILLING to OPENGATE
+	        	getModel().getLevel().getCrystal().setPermeability(Permeability.PENETRABLE);
 				getView().OpenGateUpdate();
 			}
 			
