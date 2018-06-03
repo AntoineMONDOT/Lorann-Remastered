@@ -53,8 +53,6 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
      *
      * @param level
      *            the level
-     * @param lorann
-     *            the lorann
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
@@ -107,9 +105,9 @@ public class ViewFacade implements IViewFacade, Runnable, KeyListener {
 	 */
 	public void OpenGateUpdate() {
 		try {
-			getLevel().getGate().getImage().getGraphics().drawImage(ImageIO.read(new File("sprites/gate_open.png")),0,0, null); //this update the picture of the gate from close to open
+			getLevel().getGate().getImage().getGraphics().drawImage(ImageIO.read(new File("C:\\Users\\User\\git\\Lorann-Remastered\\main\\sprites\\gate_open.png")),0,0, null); //this update the picture of the gate from close to open
 			if (getLevel().getCrystal() != null) //if the level get a crystal then we set it to black, else we didn't do anything
-				getLevel().getCrystal().getImage().getGraphics().drawImage(ImageIO.read(new File("sprites/BlackTile.jpg")),0,0, null);//this update the picture of the crystal to black
+				getLevel().getCrystal().getImage().getGraphics().drawImage(ImageIO.read(new File("C:\\Users\\User\\git\\Lorann-Remastered\\main\\sprites\\BlackTile.jpg")),0,0, null);//this update the picture of the crystal to black
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

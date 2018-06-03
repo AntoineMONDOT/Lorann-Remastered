@@ -13,12 +13,6 @@ public interface IViewFacade {
     void displayMessage(String message);
 
 
-    /**
-     * Set the order to execute
-     *
-     * @param orderPerfomer
-     *            the order
-     */
 	void setOrderPerformer(IOrderPerformer orderPeformer);
 
 

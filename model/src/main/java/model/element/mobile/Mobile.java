@@ -22,7 +22,7 @@ public abstract class Mobile extends Element implements IMobile {
     /** The alive. */
     protected Boolean alive;
 
-    /** The road. */
+    /** The level. */
     private ILevel  level;
 
     /** The board. */
@@ -33,8 +33,8 @@ public abstract class Mobile extends Element implements IMobile {
      *
      * @param sprite
      *            the sprite
-     * @param road
-     *            the road
+     * @param level
+     *            the level
      * @param permeability
      *            the permeability
      */
@@ -53,8 +53,8 @@ public abstract class Mobile extends Element implements IMobile {
      *            the y
      * @param sprite
      *            the sprite
-     * @param road
-     *            the road
+     * @param level
+     *            the level
      * @param permeability
      *            the permeability
      */
@@ -64,68 +64,58 @@ public abstract class Mobile extends Element implements IMobile {
         this.setY(y);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.insanevehicles.model.element.mobile.IMobile#moveUp()
+    /**
+     * All Movement function
      */
     @Override
     public void moveUp() {
         this.setY(this.getY() - 1);
         this.setHasMoved();
+      //If the player is crashed we is moved to his previous position
         if (this.isCrashed()) {
             this.setY(this.getY() + 1);
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.insanevehicles.model.element.mobile.IMobile#moveLeft()
-     */
     @Override
     public void moveLeft() {
         this.setX(this.getX() - 1);
         this.setHasMoved();
+      //If the player is crashed we is moved to his previous position
         if (this.isCrashed()) {
             this.setX(this.getX() + 1);
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.insanevehicles.model.element.mobile.IMobile#moveDown()
-     */
     @Override
     public void moveDown() {
         this.setY(this.getY() + 1);
         this.setHasMoved();
+      //If the player is crashed we is moved to his previous position
         if (this.isCrashed()) {
             this.setY(this.getY() - 1);
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.insanevehicles.model.element.mobile.IMobile#moveRight()
-     */
     @Override
     public void moveRight() {
         this.setX(this.getX() + 1);
         this.setHasMoved();
+      //If the player is crashed we is moved to his previous position
         if (this.isCrashed()) {
             this.setX(this.getX() - 1);
         }
     }
     
-
     @Override
     public void moveDownRight() {
         this.setX(this.getX() + 1);
         this.setY(this.getY() + 1);
+      //If the player is crashed we is moved to his previous position
         if (this.isCrashed()) {
             this.setX(this.getX() - 1);
             this.setY(this.getY() - 1);
         }
-        
         this.setHasMoved();
     }
     
@@ -133,6 +123,7 @@ public abstract class Mobile extends Element implements IMobile {
     public void moveDownLeft() {
         this.setX(this.getX() - 1);
         this.setY(this.getY() + 1);
+      //If the player is crashed we is moved to his previous position
         if (this.isCrashed()) {
             this.setX(this.getX() + 1);
             this.setY(this.getY() - 1);
@@ -144,6 +135,7 @@ public abstract class Mobile extends Element implements IMobile {
     public void moveUpRight() {
         this.setX(this.getX() + 1);
         this.setY(this.getY() - 1);
+      //If the player is crashed we is moved to his previous position
         if (this.isCrashed()) {
             this.setX(this.getX() - 1);
             this.setY(this.getY() + 1);
@@ -155,6 +147,7 @@ public abstract class Mobile extends Element implements IMobile {
     public void moveUpLeft() {
         this.setX(this.getX() - 1);
         this.setY(this.getY() - 1);
+        //If the player is crashed we is moved to his previous position
         if (this.isCrashed()) {
             this.setX(this.getX() + 1);
             this.setY(this.getY() + 1);
@@ -162,25 +155,20 @@ public abstract class Mobile extends Element implements IMobile {
         this.setHasMoved();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.insanevehicles.model.element.mobile.IMobile#doNothing()
-     */
     @Override
     public void doNothing() {
         this.setHasMoved();
     }
 
-    /**
+    /*
      * Sets the has moved.
      */
     protected void setHasMoved() {
         this.getLevel().setMobileHasChanged();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.insanevehicles.model.element.mobile.IMobile#getX()
+    /**
+     * Getter for Mobile position X
      */
     @Override
     public final int getX() {
@@ -188,21 +176,17 @@ public abstract class Mobile extends Element implements IMobile {
     }
 
     /**
-     * Sets the x.
-     *
+     * Setter for Mobile position X
+     * 
      * @param x
-     *            the new x
+     * 	the x position
      */
     public final void setX(final int x) {
         this.getPosition().x = x;
-        if (this.isKilled()) {
-            this.die();
-        }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.insanevehicles.model.element.mobile.IMobile#getY()
+    /**
+     * Getter for Mobile position Y
      */
     @Override
     public final int getY() {
@@ -210,41 +194,36 @@ public abstract class Mobile extends Element implements IMobile {
     }
 
     /**
-     * Sets the y.
-     *
-     * @param y
-     * 			the y
+     * Setter for Mobile position Y
      * 
+     * @param y
+     * 		the y position
      */
     public final void setY(final int y) {
         this.getPosition().y = y;
-        if (this.isKilled()) {
-            this.die();
-        }
     }
 
     /**
-     * Gets the road.
+     * Gets the level.
      *
-     * @return the road
+     * @return the level
      */
     public ILevel getLevel() {
         return this.level;
     }
 
     /**
-     * Sets the road.
+     * Sets the level.
      *
-     * @param road
-     *            the new road
+     * @param level
+     *            the new level
      */
     private void setLevel(final ILevel level) {
         this.level = level;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.insanevehicles.model.element.mobile.IMobile#isAlive()
+    /**
+     * Return the state of mobile element
      */
     @Override
     public Boolean isAlive() {
@@ -252,7 +231,7 @@ public abstract class Mobile extends Element implements IMobile {
     }
 
     /**
-     * Dies.
+     * Alive.
      */
     public void alive() {
     	this.alive = true;
@@ -265,37 +244,40 @@ public abstract class Mobile extends Element implements IMobile {
         this.setHasMoved();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.insanevehicles.model.element.mobile.IMobile#isCrashed()
+    /**
+     * get if mobile element his in a collision
      */
     @Override
     public Boolean isCrashed() {
         return this.getLevel().getOnTheLevelXY(this.getX(), this.getY()).getPermeability() == Permeability.BLOCKING;
     }
     
+    /**
+     * get if mobile element his killed
+     */
     @Override
     public Boolean isKilled() {
         return this.getLevel().getOnTheLevelXY(this.getX(), this.getY()).getPermeability() == Permeability.KILLING;
     }
     
+    /**
+     * get if mobile element his in a crystal
+     */    
     @Override
     public Boolean isOnCrystall() {
         return this.getLevel().getOnTheLevelXY(this.getX(), this.getY()).getPermeability() == Permeability.OPENNING;
     }
     
+    /**
+     * get if mobile element his on a gate
+     */
     @Override
     public Boolean isOnOpenGate() {
         return this.getLevel().getOnTheLevelXY(this.getX(), this.getY()).getPermeability() == Permeability.OPENGATE;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.showboard.IPawn#getPosition()
-     */
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.insanevehicles.model.element.mobile.IMobile#getPosition()
+    /**
+     * Get the position
      */
     @Override
     public Point getPosition() {

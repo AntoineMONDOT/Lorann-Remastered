@@ -1,7 +1,7 @@
 package model.element;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -12,7 +12,7 @@ import contract.model.ISprite;
 public class Sprite implements ISprite {
 
     /** The image. */
-    private BufferedImage   image;
+    private Image   image;
 
     /** The image name. */
     private String  imageName;
@@ -63,7 +63,7 @@ public class Sprite implements ISprite {
      */
     public final void loadImage() throws IOException {
     	
-        this.setImage(ImageIO.read(new File("sprites/" + this.getImageName())));
+        this.setImage(ImageIO.read(new File("C:\\Users\\User\\git\\Lorann-Remastered\\main\\sprites\\" + this.getImageName())));
     }
 
     /**
@@ -81,7 +81,7 @@ public class Sprite implements ISprite {
      * @param image
      *            the new image
      */
-    public void setImage(final BufferedImage image) {
+    public void setImage(final Image image) {
         this.image = image;
     }
 

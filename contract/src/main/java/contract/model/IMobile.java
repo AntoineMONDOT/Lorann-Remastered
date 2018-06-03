@@ -79,7 +79,7 @@ public interface IMobile extends IPawn, IElement {
     Boolean isAlive();
     
     /**
-     * Kill the playe
+     * Kill the player
      */
 	void die();
     
@@ -88,23 +88,20 @@ public interface IMobile extends IPawn, IElement {
      */
 	void alive();
     /**
-     * Checks if the car crashed.
+     * Checks if somthing happened.
      *
      * @return the boolean
      */
     Boolean isCrashed();
+	Boolean isKilled();
+	Boolean isOnCrystall();
+	Boolean isOnOpenGate();
 
-    /*
-     * (non-Javadoc)
-     * @see fr.exia.showboard.IPawn#getPosition()
-     */
+	/**
+	 * GetPosition
+	 */
     @Override
     Point getPosition();
 
-	Boolean isKilled();
-
-	Boolean isOnCrystall();
-
-	Boolean isOnOpenGate();
 
 }

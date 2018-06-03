@@ -70,6 +70,10 @@ public class Lorann extends Mobile implements ISprite{
         spriteMoveUp.loadImage();
         spriteMoveDown.loadImage();
         spriteDie.loadImage();
+        spriteMoveDownRight.loadImage();
+        spriteMoveDownLeft.loadImage();
+        spriteMoveUpRight.loadImage();
+        spriteMoveUpLeft.loadImage();
     }
     
 
